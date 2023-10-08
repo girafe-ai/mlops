@@ -1,0 +1,7 @@
+defaults:
+  - base_cifar
+
+name: cifar
+path: /data/to/cifar/dataset
+test_size: 0.2
+seed: 42
