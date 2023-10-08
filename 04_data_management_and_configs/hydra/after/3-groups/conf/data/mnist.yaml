@@ -1,0 +1,7 @@
+defaults:
+  - base_mnist
+
+name: mnist
+path: /data/to/mnist/dataset
+test_size: 0.15
+seed: 123
