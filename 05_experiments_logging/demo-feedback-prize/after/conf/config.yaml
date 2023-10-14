@@ -1,0 +1,58 @@
+model:
+  name: microsoft/deberta-v3-small
+  dropout: 0.5
+  freeze_backbone: false
+
+data:
+  csv_path: /home/toomuch/mlops-course/lightning/demo-feedback-prize/data/train.csv
+  val_size: 0.2
+  dataloader_num_wokers: 8
+  batch_size: 8
+  text_max_length: 512
+
+labels:
+  - cohesion
+  - syntax
+  - vocabulary
+  - phraseology
+  - grammar
+  - conventions
+
+train:
+  learning_rate: 2e-5
+  weight_decay: 0.01
+  num_warmup_steps: 100
+  num_training_steps: 1000
+  grad_accum_steps: 4
+  accelerator: cuda
+  devices:
+    - 0
+  precision: 16-mixed
+  val_check_interval: 1.0
+  overfit_batches: 0
+  num_sanity_val_steps: 4
+  full_deterministic_mode: false
+  benchmark: false
+  gradient_clip_val: 1.0
+  profiler:
+  log_every_n_steps: 1
+  batch_size_finder: false
+  detect_anomaly: false
+
+artifacts:
+  experiment_name: example-experiment
+  checkpoint:
+    use: false
+    dirpath: checkpoints
+    filename: "{epoch:02d}-{val_loss:.4f}"
+    monitor: val_loss
+    save_top_k: 3
+    every_n_train_steps:
+    every_n_epochs: 1
+
+callbacks:
+  model_summary:
+    max_depth: 1
+  swa:
+    use: false
+    lrs: 1e-3
