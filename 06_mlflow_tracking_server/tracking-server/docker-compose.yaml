@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  mlflow:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: mlflow server --backend-store-uri postgresql://mlflow:mlflow@db:5432/mlflow --default-artifact-root /mlflow --host 0.0.0.0 --no-serve-artifacts --app-name basic-auth
+    ports:
+      - "13412:5000"
+    volumes:
+      - /raid0/mlflow/:/mlflow
+    environment:
+      - MLFLOW_ARTIFACT_ROOT=/mlflow
+      - MLFLOW_SQLALCHEMYSTORE_URI=postgresql://mlflow:mlflow@db:5432/mlflow
+      - MLFLOW_TRACKING_USERNAME=admin
+      - MLFLOW_TRACKING_PASSWORD=password
+
+  db:
+    restart: always
+    image: postgres:13
+    ports:
+      - "13413:5432"
+    environment:
+      - POSTGRES_USER=mlflow
+      - POSTGRES_PASSWORD=mlflow
+      - POSTGRES_DB=mlflow
+    volumes:
+      - /raid0/mlflow-postgres-data/:/var/lib/postgresql/data
