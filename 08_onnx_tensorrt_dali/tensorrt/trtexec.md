@@ -83,4 +83,3 @@ trtexec --onnx=/models/resnet50.onnx \
 --builderOptimizationLevel=5 \
 --hardwareCompatibilityLevel=ampere+
 ```
-
