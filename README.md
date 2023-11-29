@@ -1,7 +1,5 @@
 # Курс MLOps от girafe-ai
 
-[Записи осени 2023 на youtube](https://www.youtube.com/playlist?list=PLJR10EXrBaAuJzCa9HKmLRdUpgajnh1g7)
-
 Полезные ссылки:
 - python packaging: https://realpython.com/python-modules-packages/
 - poetry: https://python-poetry.org/docs/
