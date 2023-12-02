@@ -1,0 +1,35 @@
+name: "trt-fp16-rubert"
+platform: "tensorrt_plan"
+max_batch_size: 8
+
+
+input [
+    {
+        name: "INPUT_IDS"
+        data_type: TYPE_INT32
+        dims: [ 16 ]
+    },
+    {
+        name: "ATTENTION_MASK"
+        data_type: TYPE_INT32
+        dims: [ 16 ]
+    }
+]
+
+output [
+    {
+        name: "EMBEDDINGS"
+        data_type: TYPE_FP32
+        dims: [ 96 ]
+    }
+]
+
+instance_group [
+    {
+        count: 1
+        kind: KIND_GPU
+        gpus: [0]
+    }
+]
+
+dynamic_batching: { max_queue_delay_microseconds: 2000 }

@@ -1,0 +1,55 @@
+name: "ensemble-onnx"
+platform: "ensemble"
+
+input [
+    {
+        name: "TEXTS"
+        data_type: TYPE_STRING
+        dims: [ -1 ]
+    }
+]
+
+output [
+    {
+        name: "EMBEDDINGS"
+        data_type: TYPE_FP32
+        dims: [ -1, 96 ]
+    }
+]
+
+ensemble_scheduling {
+    step [
+        {
+            model_name: "python-tokenizer"
+            model_version: -1
+            input_map {
+                key: "TEXTS"
+                value: "TEXTS"
+            }
+            output_map {
+                key: "INPUT_IDS"
+                value: "INPUT_IDS"
+            }
+            output_map {
+                key: "ATTENTION_MASK"
+                value: "ATTENTION_MASK"
+            }
+        },
+        {
+            model_name: "onnx-rubert"
+            model_version: -1
+            input_map {
+                key: "INPUT_IDS"
+                value: "INPUT_IDS"
+            }
+            input_map {
+                key: "ATTENTION_MASK"
+                value: "ATTENTION_MASK"
+            }
+            output_map {
+                key: "EMBEDDINGS"
+                value: "EMBEDDINGS"
+            }
+        }
+    ]
+}
