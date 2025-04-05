@@ -1,3 +1,6 @@
+import pytest
+
+
 def summary_grids():
     return {
         "data_loading": {
@@ -15,6 +18,7 @@ def summary_grids():
     }
 
 
+@pytest.mark.requires_files
 def test_config(data_regression):
     data = summary_grids()
     data_regression.check(data)
