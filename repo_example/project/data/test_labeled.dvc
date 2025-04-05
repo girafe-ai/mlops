@@ -1,0 +1,6 @@
+outs:
+- md5: fee83830fc8ff4122e166ecd56d0b88b.dir
+  size: 285498149
+  nfiles: 12494
+  hash: md5
+  path: test_labeled

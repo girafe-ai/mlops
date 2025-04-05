@@ -1,0 +1,6 @@
+[core]
+    remote = data
+['remote "data"']
+    url = /Users/naumov-vladis/dvc-storage/data
+['remote "models"']
+    url = /Users/naumov-vladis/dvc-storage/models

@@ -1,0 +1,12 @@
+label: wandb
+
+# Wandb
+project: cats-and-dogs
+name: conv-model-exp
+save_dir: "."
+
+# MLFlow
+experiment_name: cats-and-dogs
+run_name: linear-model-exp
+mlflow_save_dir: "."
+tracking_uri: http://127.0.0.1:8080
