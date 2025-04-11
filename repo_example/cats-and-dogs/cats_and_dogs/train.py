@@ -1,13 +1,14 @@
 import hydra
 import pytorch_lightning as pl
 from omegaconf import DictConfig
+from pl_modules.classifiers import ConvClassifier
+from pl_modules.data import MyDataModule
+from pl_modules.model import ImageClassifier
+from pytorch_lightning.strategies import DDPStrategy
+from torch.distributed.algorithms.ddp_comm_hooks import powerSGD_hook as powerSGD
 
-from cats_and_dogs.pl_modules.classifiers import ConvClassifier
-from cats_and_dogs.pl_modules.data import MyDataModule
-from cats_and_dogs.pl_modules.model import ImageClassifier
 
-
-@hydra.main(version_base=None, config_path="../../conf", config_name="config")
+@hydra.main(version_base=None, config_path="../conf", config_name="config")
 def main(config: DictConfig):
     pl.seed_everything(42)
     dm = MyDataModule(config)
@@ -53,8 +54,17 @@ def main(config: DictConfig):
     trainer = pl.Trainer(
         max_epochs=config["training"]["num_epochs"],
         log_every_n_steps=1,  # to resolve warnings
-        accelerator="auto",
-        devices="auto",
+        accelerator="cuda",
+        devices=2,
+        strategy=DDPStrategy(
+            ddp_comm_state=powerSGD.PowerSGDState(
+                process_group=None,
+                matrix_approximation_rank=1,
+                start_powerSGD_iter=5000,
+                use_error_feedback=True
+            ),
+            ddp_comm_hook=powerSGD.powerSGD_hook,
+        ),
         logger=loggers,
         callbacks=callbacks,
     )
