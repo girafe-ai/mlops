@@ -1,0 +1,20 @@
+channels:
+- conda-forge
+dependencies:
+- python=3.10.16
+- pip<=25.0
+- pip:
+  - mlflow==2.21.3
+  - attrs==25.3.0
+  - cloudpickle==3.1.1
+  - colorama==0.4.6
+  - jaraco-collections==5.1.0
+  - matplotlib==3.10.1
+  - numpy==2.1.2
+  - pydot==3.0.4
+  - pytorch-lightning==2.5.1
+  - rich==14.0.0
+  - scipy==1.15.2
+  - torchvision==0.20.1
+  - uuid==1.30
+name: mlflow-env

@@ -1,6 +1,7 @@
 import os
 
 import pytest
+
 from cats_and_dogs.pl_modules.model import ImageClassifier
 
 

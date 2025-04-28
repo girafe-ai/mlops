@@ -1,0 +1,60 @@
+name: "ensemble-conv"
+platform: "ensemble"
+
+
+input [
+    {
+        name: "IMAGE_PATH"
+        data_type: TYPE_STRING
+        dims: [ -1 ]
+    }
+]
+
+output [
+    {
+        name: "PREDICTED_CLASS"
+        data_type: TYPE_INT32
+        dims: [ -1 ]
+    }
+]
+
+ensemble_scheduling {
+    step [
+        {
+            model_name: "image-preprocessor"
+            model_version: -1
+            input_map {
+                key: "IMAGE_PATH"
+                value: "IMAGE_PATH"
+            }
+            output_map {
+                key: "PREPROCESSED_IMAGE"
+                value: "PREPROCESSED_IMAGE"
+            }
+        },
+        {
+            model_name: "conv-encoder-FP16"
+            model_version: -1
+            input_map {
+                key: "PREPROCESSED_IMAGE"
+                value: "PREPROCESSED_IMAGE"
+            }
+            output_map {
+                key: "LOGITS"
+                value: "LOGITS"
+            }
+        },
+        {
+            model_name: "class-predictor"
+            model_version: -1
+            input_map {
+                key: "LOGITS"
+                value: "LOGITS"
+            }
+            output_map {
+                key: "PREDICTED_CLASS"
+                value: "PREDICTED_CLASS"
+            }
+        }
+    ]
+}

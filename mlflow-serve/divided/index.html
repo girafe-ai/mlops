@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cats vs Dogs Classifier</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      text-align: center;
+    }
+    img {
+      max-width: 300px;
+      margin-top: 20px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    #loader {
+      display: none;
+      margin-top: 20px;
+    }
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Upload an Image</h1>
+  
+  <input type="file" id="fileInput" accept="image/*">
+  
+  <div>
+    <img id="preview" src="#" alt="Image preview..." style="display:none;">
+  </div>
+
+  <div id="loader">
+    <div class="spinner"></div>
+    <p>Predicting...</p>
+  </div>
+
+  <div id="result"></div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const resultDiv = document.getElementById('result');
+    const loader = document.getElementById('loader');
+
+    fileInput.addEventListener('change', async (event) => {
+      event.preventDefault();
+      const file = event.target.files[0];
+      if (!file) return;
+
+      console.log("File selected:", file.name);
+      const reader = new FileReader();
+      reader.onload = e => {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+
+      resultDiv.textContent = "";
+      loader.style.display = 'block';
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        console.log("Uploading file...");
+        const uploadResponse = await fetch('http://localhost:8890/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error(`Upload failed with status ${uploadResponse.status}`);
+        }
+
+        const uploadResult = await uploadResponse.json();
+        console.log("Upload successful:", uploadResult);
+        const imagePath = uploadResult.path;
+
+        console.log("Sending to MLFlow...");
+        const mlflowResponse = await fetch('http://localhost:8890/invocations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            inputs: [
+              {
+                data: imagePath
+              }
+            ]
+          })
+        });
+
+        if (!mlflowResponse.ok) {
+          throw new Error(`MLFlow request failed with status ${mlflowResponse.status}`);
+        }
+
+        const prediction = await mlflowResponse.json();
+        console.log("MLFlow response:", prediction);
+
+        const predictedClass = prediction.predictions[0];
+        resultDiv.textContent = predictedClass === 0 ? "🐱 It's a Cat!" : "🐶 It's a Dog!";
+      } catch (error) {
+        console.error("Error occurred:", error);
+        resultDiv.textContent = `Prediction failed: ${error.message}`;
+      } finally {
+        loader.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

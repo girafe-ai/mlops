@@ -1,0 +1,20 @@
+flavors:
+  python_function:
+    artifacts:
+      model_weights:
+        path: artifacts/model_weights.ckpt
+        uri: model_weights.ckpt
+    cloudpickle_version: 3.1.1
+    code: null
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.pyfunc.model
+    python_model: python_model.pkl
+    python_version: 3.10.16
+    streamable: false
+mlflow_version: 2.21.3
+model_size_bytes: 2890866
+model_uuid: 9f987daa5d084d288f92c76900fe3453
+prompts: null
+utc_time_created: '2025-04-18 15:53:45.160369'

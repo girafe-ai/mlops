@@ -10,8 +10,8 @@ from torch.utils.data.distributed import DistributedSampler
 from torchvision.datasets import MNIST
 
 
-def init_process(local_rank, fn, backend='nccl'):
-    """ Initialize the distributed environment. """
+def init_process(local_rank, fn, backend="nccl"):
+    """Initialize the distributed environment."""
     dist.init_process_group(backend, rank=local_rank)
     size = dist.get_world_size()
     fn(local_rank, size)
@@ -54,16 +54,20 @@ def average_gradients(model):
 
 def run_training(rank, size):
     torch.manual_seed(1234)
-    dataset = MNIST('./mnist', download=True, transform=transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.1307,), (0.3081,))
-    ]))
-    loader = DataLoader(dataset, sampler=DistributedSampler(dataset, size, rank), batch_size=16)
+    dataset = MNIST(
+        "./mnist",
+        download=True,
+        transform=transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
+        ),
+    )
+    loader = DataLoader(
+        dataset, sampler=DistributedSampler(dataset, size, rank), batch_size=16
+    )
     model = Net()
-    device = torch.device('cpu')
+    device = torch.device("cpu")
     model.to(device)
-    optimizer = torch.optim.SGD(model.parameters(),
-                                lr=0.01, momentum=0.5)
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.5)
 
     num_batches = len(loader)
     steps = 0
@@ -80,10 +84,10 @@ def run_training(rank, size):
         optimizer.step()
         steps += 1
         if True:
-            print(f'Rank {dist.get_rank()}, loss: {epoch_loss / num_batches}')
+            print(f"Rank {dist.get_rank()}, loss: {epoch_loss / num_batches}")
             epoch_loss = 0
 
 
 if __name__ == "__main__":
     local_rank = int(os.environ["LOCAL_RANK"])
-    init_process(local_rank, fn=run_training, backend='gloo')
+    init_process(local_rank, fn=run_training, backend="gloo")

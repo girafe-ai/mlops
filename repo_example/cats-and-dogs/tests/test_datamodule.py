@@ -1,6 +1,7 @@
 import pytest
 import torch
 import torchvision
+
 from cats_and_dogs.pl_modules.data import MyDataModule
 
 

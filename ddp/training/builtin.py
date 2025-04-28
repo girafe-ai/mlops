@@ -4,15 +4,15 @@ import torch
 import torch.distributed as dist
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.nn.parallel import DistributedDataParallel
 import torchvision.transforms as transforms
+from torch.nn.parallel import DistributedDataParallel
 from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
 from torchvision.datasets import MNIST
 
 
-def init_process(local_rank, fn, backend='nccl'):
-    """ Initialize the distributed environment. """
+def init_process(local_rank, fn, backend="nccl"):
+    """Initialize the distributed environment."""
     dist.init_process_group(backend, rank=local_rank)
     size = dist.get_world_size()
     fn(local_rank, size)
@@ -45,19 +45,23 @@ class Net(nn.Module):
         output = self.fc2(x)
         return output
 
+
 def run_training(rank, size):
     torch.manual_seed(1234)
-    dataset = MNIST('./mnist', download=True, transform=transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.1307,), (0.3081,))
-    ]))
-    loader = DataLoader(dataset,
-                        sampler=DistributedSampler(dataset, size, rank),
-                        batch_size=16)
+    dataset = MNIST(
+        "./mnist",
+        download=True,
+        transform=transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
+        ),
+    )
+    loader = DataLoader(
+        dataset, sampler=DistributedSampler(dataset, size, rank), batch_size=16
+    )
     model = Net()
-    device = torch.device('cuda', rank)
+    device = torch.device("cuda", rank)
     model.to(device)
-    
+
     model = DistributedDataParallel(model, device_ids=[rank], output_device=rank)
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.5)
 
@@ -67,21 +71,21 @@ def run_training(rank, size):
     for data, target in loader:
         data = data.to(device)
         target = target.to(device)
-        
+
         optimizer.zero_grad()
         output = model(data)
         loss = torch.nn.functional.cross_entropy(output, target)
         epoch_loss += loss.item()
         loss.backward()
-        
+
         optimizer.step()
         steps += 1
         if True:
-            print(f'Rank {dist.get_rank()}, loss: {epoch_loss / num_batches}')
+            print(f"Rank {dist.get_rank()}, loss: {epoch_loss / num_batches}")
             epoch_loss = 0
 
 
 if __name__ == "__main__":
-    os.environ.setdefault('LOCAL_RANK', '0')
+    os.environ.setdefault("LOCAL_RANK", "0")
     local_rank = int(os.environ["LOCAL_RANK"])
-    init_process(local_rank, fn=run_training, backend='nccl')
+    init_process(local_rank, fn=run_training, backend="nccl")

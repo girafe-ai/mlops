@@ -1,0 +1,40 @@
+name: "conv-encoder-FP16"
+platform: "tensorrt_plan"
+max_batch_size: 64
+
+
+input [
+    {
+        name: "PREPROCESSED_IMAGE"
+        data_type: TYPE_FP32
+        dims: [ 3, 96, 96 ]
+    }
+]
+
+output [
+    {
+        name: "LOGITS"
+        data_type: TYPE_FP32
+        dims: [ 2 ]
+    }
+]
+
+instance_group [
+    {
+        count: 1
+        kind: KIND_GPU
+        gpus: [0]
+    }
+]
+
+cc_model_filenames [
+  {
+    key: "7.5"
+    value: "conv_model.plan"
+  }
+]
+
+dynamic_batching {
+    max_queue_delay_microseconds: 1000,
+    preferred_batch_size: [ 1, 2, 4, 8, 16, 32, 64 ],
+}

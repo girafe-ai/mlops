@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mlflow:
+    build: ./mlflow
+    container_name: mlflow
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./mlflow:/mlflow
+      - ./uploads:/uploads
+    
+  proxy:
+    build: ./proxy
+    container_name: proxy
+    ports:
+      - "8890:8890"
+    depends_on:
+      - mlflow
+    volumes:
+      - ./uploads:/uploads
+    environment:
+      - MLFLOW_URL=http://mlflow:8888
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "9000:80"
+    depends_on:
+      - proxy
