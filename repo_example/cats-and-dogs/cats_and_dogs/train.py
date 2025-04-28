@@ -61,7 +61,7 @@ def main(config: DictConfig):
                 process_group=None,
                 matrix_approximation_rank=1,
                 start_powerSGD_iter=5000,
-                use_error_feedback=True
+                use_error_feedback=True,
             ),
             ddp_comm_hook=powerSGD.powerSGD_hook,
         ),

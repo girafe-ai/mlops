@@ -1,6 +1,5 @@
 import numpy as np
 import torch
-
 from cats_and_dogs.scratch.data import init_dataloader, init_dataset
 from cats_and_dogs.scratch.model import SimpleClassifier
 

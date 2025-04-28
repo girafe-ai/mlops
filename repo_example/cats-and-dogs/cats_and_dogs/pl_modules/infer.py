@@ -1,10 +1,9 @@
 import hydra
 import numpy as np
 import pytorch_lightning as pl
+from data import MyDataModule
 from model import ImageClassifier
 from omegaconf import DictConfig
-
-from data import MyDataModule
 
 
 @hydra.main(version_base=None, config_path="../../conf", config_name="config")

@@ -1,5 +1,4 @@
 import torch
-
 from cats_and_dogs.pl_modules.classifiers import SimpleClassifier
 
 
