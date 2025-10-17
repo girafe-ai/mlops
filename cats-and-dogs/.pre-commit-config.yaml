@@ -1,0 +1,42 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.1
+    hooks:
+      - id: ruff-format
+      - id: ruff-check
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-case-conflict
+      - id: mixed-line-ending
+
+  - repo: https://github.com/rbubley/mirrors-prettier
+    # fork of oficial repo which support is discontinued
+    rev: v3.6.2
+    hooks:
+      - id: prettier
+        types_or: [markdown, yaml, json, dockerfile, shell, toml, sql]
+        additional_dependencies:
+          - prettier@3.6.2
+          - prettier-plugin-sh@0.18.0
+          - prettier-plugin-toml@2.0.6
+          - prettier-plugin-sql@0.19.2
+          # for plugings see https://prettier.io/docs/plugins#community-plugins
+        args: [--print-width=80, --prose-wrap=always]
+
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        additional_dependencies: [tomli]
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck

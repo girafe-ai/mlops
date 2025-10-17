@@ -2,7 +2,7 @@ from typing import Any
 
 import torch
 import torchvision
-import torchvision.transforms as transforms
+from torchvision import transforms
 
 
 def init_dataset(path: str):
@@ -24,9 +24,7 @@ def init_dataset(path: str):
     return torchvision.datasets.ImageFolder(path, transformer)
 
 
-def init_dataloader(
-    dataset: Any, batch_size: int, shuffle: bool = True, num_workers: int = 6
-):
+def init_dataloader(dataset: Any, batch_size: int, shuffle: bool = True, num_workers: int = 6):
     """Initialize torch dataloader from dataset
 
     Args:
