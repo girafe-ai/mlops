@@ -1,0 +1,10 @@
+services:
+  model_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8000"
+
+  sandbox:
+    image: nginx:latest
