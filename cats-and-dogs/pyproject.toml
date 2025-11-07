@@ -13,6 +13,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "fire>=0.7.1",
+    "jupyter>=1.1.1",
     "pre-commit>=4.3.0",
 ]
 
