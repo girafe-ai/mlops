@@ -5,6 +5,7 @@ description = "Image classification challenge from Azira: Cats vs Dogs"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "dvc>=3.64.0",
     "lightning>=2.5.6",
     "mlflow>=3.5.1",
     "numpy>=2.3.4",
