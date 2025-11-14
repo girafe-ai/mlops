@@ -163,3 +163,4 @@ cython_debug/
 
 cats-and-dogs/data/
 *.pth
+lightning_logs/
