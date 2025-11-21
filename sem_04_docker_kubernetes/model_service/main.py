@@ -1,5 +1,8 @@
+import os
+
 from fastapi import FastAPI
 
+print(os.environ)
 app = FastAPI()
 
 
