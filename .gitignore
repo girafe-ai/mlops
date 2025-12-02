@@ -162,5 +162,8 @@ cython_debug/
 .python-version
 
 cats-and-dogs/data/
+cats-and-dogs/multirun/
+cats-and-dogs/outputs/
+cats-and-dogs/tb_logs/
 *.pth
 lightning_logs/

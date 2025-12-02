@@ -1,0 +1,8 @@
+defaults:
+  - data: data
+  - logging: logging
+  - model: simple
+  - _self_
+
+num_epochs: 1
+output_file: ${.data.train_batch_size}_${.model.type}.pth

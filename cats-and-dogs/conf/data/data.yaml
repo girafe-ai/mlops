@@ -1,0 +1,4 @@
+train_data_dir: data/train
+val_data_dir: data/val
+train_batch_size: 128
+predict_batch_size: 256
