@@ -1,0 +1,19 @@
+[project]
+name = "cityscapes-segmentation"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "cityscapesscripts>=2.2.4",
+    "ipykernel>=7.2.0",
+    "jupyterhub>=5.4.3",
+    "jupyterlab>=4.5.4",
+    "pandas>=2.3.3",
+    "requests>=2.32.5",
+]
+
+[dependency-groups]
+dev = [
+    "fire>=0.7.1",
+]
