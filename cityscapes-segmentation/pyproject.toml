@@ -13,7 +13,18 @@ dependencies = [
     "requests>=2.32.5",
 ]
 
+[project.scripts]
+strip-notebook-outputs = "hooks.strip_notebook_outputs:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["hooks"]
+
 [dependency-groups]
 dev = [
     "fire>=0.7.1",
+    "pre-commit>=4.0.0",
 ]

@@ -139,10 +139,12 @@ mlruns/
 
 .DS_Store
 .venv
+.ruff_cache
 
 # Project internal
 segment
 jupyterhub_cookie_secret
 *.pid
 *.sqlite
-data/
+data/*
+!data/.gitkeep

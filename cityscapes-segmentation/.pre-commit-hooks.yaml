@@ -1,0 +1,6 @@
+- id: strip-notebook-outputs
+  name: Strip Jupyter notebook outputs
+  description: Remove cell outputs and execution counts from Jupyter notebooks.
+  entry: strip-notebook-outputs
+  language: python
+  types: [jupyter]

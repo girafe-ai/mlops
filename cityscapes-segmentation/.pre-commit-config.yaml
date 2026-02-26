@@ -1,0 +1,26 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.2
+    hooks:
+      - id: ruff
+        args: [--fix, --select, I]
+        exclude: jupyterhub-demo/
+      - id: ruff-format
+        exclude: jupyterhub-demo/
+
+  - repo: local
+    hooks:
+      - id: strip-notebook-outputs
+        name: Strip Jupyter notebook outputs
+        entry: python cityscapes-segmentation/hooks/strip_notebook_outputs.py
+        language: system
+        types: [jupyter]
