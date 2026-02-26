@@ -156,9 +156,34 @@ hook won't see them.
 ### Project structure
 
 ```
-.pre-commit-config.yaml      # which hooks to run
-.pre-commit-hooks.yaml       # hook metadata (allows other repos to use this hook)
+.pre-commit-config.yaml      # which hooks to run (consumer)
+.pre-commit-hooks.yaml       # which hooks this repo provides (publisher)
 hooks/
   __init__.py
   strip_notebook_outputs.py  # the hook implementation
 ```
+
+### `.pre-commit-config.yaml` vs `.pre-commit-hooks.yaml`
+
+These two files look similar but serve opposite roles:
+
+- **`.pre-commit-config.yaml`** — the **consumer** side. It declares which hooks
+  this project runs on every commit. It references external repos
+  (`pre-commit-hooks`, `ruff-pre-commit`) and local hooks.
+
+- **`.pre-commit-hooks.yaml`** — the **publisher** side. It declares which hooks
+  this repo **exposes to other projects**. If another team wants to reuse your
+  `strip-notebook-outputs` hook, they can reference this repo in their own
+  `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/yourname/your-repo
+    rev: v0.1.0
+    hooks:
+      - id: strip-notebook-outputs
+```
+
+If you only use hooks locally and don't plan to share them,
+`.pre-commit-hooks.yaml` is optional. It is included here for completeness
+and in case the hook is reused across projects in the future.

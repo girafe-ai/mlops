@@ -1,0 +1,6 @@
+- id: strip-notebook-outputs
+  name: Strip Jupyter notebook outputs
+  description: Remove cell outputs and execution counts from Jupyter notebooks.
+  entry: python cityscapes-segmentation/hooks/strip_notebook_outputs.py
+  language: system
+  types: [jupyter]
