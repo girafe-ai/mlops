@@ -78,4 +78,11 @@ class CityscapesDownloader:
 
 
 if __name__ == "__main__":
+    s = "dummy"
+
+
+
+
+
+    "aaelndmeopeandw0pn"
     fire.Fire(CityscapesDownloader)
