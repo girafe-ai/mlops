@@ -1,0 +1,24 @@
+name: pre-commit
+
+on:
+  pull_request:
+    branches: [26s-mipt]
+  push:
+    branches: [26s-mipt]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cityscapes-segmentation
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --config cityscapes-segmentation/.pre-commit-config.yaml --all-files
