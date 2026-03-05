@@ -1,0 +1,19 @@
+# --- stage 1: build dependencies in the FULL image (has gcc, headers, etc.) ---
+FROM python:3.10 AS builder
+
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# --- stage 2: runtime uses the SLIM image (no compilers, no pip cache) ---
+FROM python:3.10-slim
+
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+WORKDIR /app
+COPY train.py .
+
+CMD ["python", "train.py"]

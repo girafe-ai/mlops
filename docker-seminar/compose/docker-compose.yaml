@@ -1,0 +1,33 @@
+services:
+  train-default:
+    build:
+      context: ..
+      dockerfile: plain/Dockerfile
+    volumes:
+      - ./outputs/default:/outputs
+    environment:
+      - LEARNING_RATE=0.1
+      - DEPTH=6
+      - ITERATIONS=500
+
+  train-deep:
+    build:
+      context: ..
+      dockerfile: plain/Dockerfile
+    volumes:
+      - ./outputs/deep:/outputs
+    environment:
+      - LEARNING_RATE=0.05
+      - DEPTH=10
+      - ITERATIONS=1000
+
+  train-fast:
+    build:
+      context: ..
+      dockerfile: plain/Dockerfile
+    volumes:
+      - ./outputs/fast:/outputs
+    environment:
+      - LEARNING_RATE=0.3
+      - DEPTH=4
+      - ITERATIONS=200
