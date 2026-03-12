@@ -1,0 +1,136 @@
+# Seminar: PySpark Streaming + Kafka + Airflow
+# Uses Confluent Kafka/Zookeeper and Apache Spark
+
+networks:
+  seminar_net:
+    name: seminar_net
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    networks: [seminar_net]
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    networks: [seminar_net]
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+
+  spark-master:
+    image: apache/spark:3.5.0
+    networks: [seminar_net]
+    command:
+      ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master"]
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    volumes:
+      - ./spark:/opt/spark/job:ro
+      - spark_ivy_cache:/home/spark/.ivy2
+
+  spark-worker:
+    image: apache/spark:3.5.0
+    networks: [seminar_net]
+    depends_on:
+      - spark-master
+    command:
+      [
+        "/opt/spark/bin/spark-class",
+        "org.apache.spark.deploy.worker.Worker",
+        "spark://spark-master:7077",
+      ]
+
+  generator:
+    build: ./generator
+    networks: [seminar_net]
+    depends_on:
+      - postgres
+    environment:
+      - EVENTS_DB_HOST=postgres
+      - EVENTS_DB_NAME=events
+      - EVENTS_DB_USER=airflow
+      - EVENTS_DB_PASSWORD=airflow
+      - GENERATOR_BATCH_SIZE=500
+      - GENERATOR_NUM_BATCHES=2
+    restart: "no"
+    profiles:
+      - seed
+
+  pusher:
+    build: ./pusher
+    networks: [seminar_net]
+    depends_on:
+      - kafka
+      - postgres
+    environment:
+      - EVENTS_DB_HOST=postgres
+      - EVENTS_DB_NAME=events
+      - EVENTS_DB_USER=airflow
+      - EVENTS_DB_PASSWORD=airflow
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_TOPIC=events
+      - PUSHER_POLL_INTERVAL_SEC=2
+      - PUSHER_BATCH_SIZE=100
+    restart: unless-stopped
+
+  airflow:
+    build: ./airflow
+    hostname: airflow
+    networks: [seminar_net]
+    depends_on:
+      - postgres
+      - kafka
+      - spark-master
+    environment:
+      - HOSTNAME=airflow
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=False
+      - _AIRFLOW_WWW_USER_CREATE=true
+      - _AIRFLOW_WWW_USER_USERNAME=admin
+      - _AIRFLOW_WWW_USER_PASSWORD=admin
+      - AIRFLOW_SEMINAR_HOST_PATH=${PWD}
+      - AIRFLOW_SEMINAR_NETWORK=seminar_net
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags:ro
+      - ./spark:/opt/airflow/spark:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8081:8080"
+    command: ["standalone"]
+    user: "0:0"
+
+  postgres:
+    networks: [seminar_net]
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  spark_ivy_cache:
