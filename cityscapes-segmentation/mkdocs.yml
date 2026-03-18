@@ -1,0 +1,17 @@
+site_name: Your Project
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - Guide: guide.md
+  - API: api.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: false
+            docstring_style: google

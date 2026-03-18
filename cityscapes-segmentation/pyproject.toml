@@ -5,16 +5,30 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "albumentations>=1.3.0",
     "cityscapesscripts>=2.2.4",
     "ipykernel>=7.2.0",
     "jupyterhub>=5.4.3",
     "jupyterlab>=4.5.4",
+    "numpy>=1.24.0",
     "pandas>=2.3.3",
+    "pillow>=10.0.0",
     "requests>=2.32.5",
+    "segmentation-models-pytorch>=0.3.3",
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "tqdm>=4.65.0",
 ]
 
 [project.scripts]
 strip-notebook-outputs = "hooks.strip_notebook_outputs:main"
+
+[project.optional-dependencies]
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.7.5",
+    "mkdocstrings[python]>=1.0.3",
+]
 
 [build-system]
 requires = ["hatchling"]
