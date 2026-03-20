@@ -1,6 +1,6 @@
 """Run inference with a trained Cityscapes segmentation model.
 
-Usage::
+Usage:
 
     uv run python infer.py
 """

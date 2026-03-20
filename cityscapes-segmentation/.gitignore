@@ -146,5 +146,6 @@ segment
 jupyterhub_cookie_secret
 *.pid
 *.sqlite
-data/*
-!data/.gitkeep
+# data/*
+# !data/.gitkeep
+checkpoints

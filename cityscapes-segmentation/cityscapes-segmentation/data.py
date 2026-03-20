@@ -1,3 +1,17 @@
+"""Cityscapes dataset loading and preprocessing.
+
+Provides :class:`CityscapesDataset` and the :func:`get_dataloader` factory
+for loading locally stored Cityscapes images and ground-truth masks.
+
+Expected data layout::
+
+    data_root/
+        leftImg8bit/{train,val,test}/{city}/*_leftImg8bit.png
+        gtFine/{train,val,test}/{city}/*_gtFine_labelIds.png
+
+Download the dataset via ``scripts/download.py`` if not already present.
+"""
+
 from pathlib import Path
 
 import albumentations as A
@@ -82,9 +96,22 @@ class CityscapesDataset(Dataset):
             self.samples = self.samples[:max_samples]
 
     def __len__(self) -> int:
+        """Return the number of image–mask pairs in the split."""
         return len(self.samples)
 
     def __getitem__(self, idx: int) -> dict:
+        """Load, preprocess and return one sample.
+
+        Args:
+            idx: Index of the sample to retrieve.
+
+        Returns:
+            Dictionary with keys:
+
+            - ``"image"``: ``FloatTensor[3, H, W]`` — normalised RGB image.
+            - ``"mask"``: ``LongTensor[H, W]`` — per-pixel train IDs
+                (0–18); unlabelled pixels are set to ``255``.
+        """
         img_path, mask_path = self.samples[idx]
 
         image = np.array(Image.open(img_path).convert("RGB"), dtype=np.uint8)

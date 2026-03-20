@@ -1,17 +1,23 @@
-site_name: Your Project
+site_name: Cityscapes Segmentation
 theme:
-  name: material
+  name: readthedocs
 
 nav:
   - Home: index.md
   - Guide: guide.md
   - API: api.md
 
+markdown_extensions:
+  - toc:
+      toc_depth: 3
+
 plugins:
   - search
   - mkdocstrings:
       handlers:
         python:
+          paths:
+            - cityscapes-segmentation
           options:
             show_source: false
             docstring_style: google

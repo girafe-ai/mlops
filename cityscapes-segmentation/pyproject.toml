@@ -39,6 +39,7 @@ packages = ["hooks"]
 
 [dependency-groups]
 dev = [
+    "dvc>=3.67.0",
     "fire>=0.7.1",
     "pre-commit>=4.0.0",
 ]

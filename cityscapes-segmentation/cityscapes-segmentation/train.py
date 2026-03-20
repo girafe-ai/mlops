@@ -1,6 +1,6 @@
 """Train a UNet segmentation model on the Cityscapes dataset.
 
-Usage::
+Usage:
 
     uv run python train.py
 """
@@ -53,6 +53,24 @@ def train_one_epoch(
     epoch: int,
     total_epochs: int,
 ) -> float:
+    """Run a single training epoch with mixed-precision forward and backward passes.
+
+    Iterates over all batches in ``loader``, computes the loss, backpropagates
+    with AMP gradient scaling, and updates the model weights.
+
+    Args:
+        model: The segmentation model to train.
+        loader: DataLoader for the training split.
+        criterion: Loss function (e.g. ``CrossEntropyLoss``).
+        optimizer: Parameter optimizer.
+        device: Device to run computation on.
+        scaler: AMP gradient scaler; scaling is disabled automatically on CPU.
+        epoch: Current epoch number (1-indexed), used for the progress bar label.
+        total_epochs: Total number of epochs, used for the progress bar label.
+
+    Returns:
+        Mean training loss over all samples in the epoch.
+    """
     model.train()
     total_loss = 0.0
 
@@ -85,6 +103,23 @@ def validate(
     epoch: int,
     total_epochs: int,
 ) -> tuple[float, float]:
+    """Evaluate the model on a validation split without gradient computation.
+
+    Runs inference over all batches in ``loader``, accumulates the loss, and
+    computes mean IoU across the full split via a confusion matrix.
+
+    Args:
+        model: The segmentation model to evaluate.
+        loader: DataLoader for the validation split.
+        criterion: Loss function used for the validation loss.
+        device: Device to run computation on.
+        epoch: Current epoch number (1-indexed), used for the progress bar label.
+        total_epochs: Total number of epochs, used for the progress bar label.
+
+    Returns:
+        Tuple of ``(val_loss, val_miou)`` — mean loss per sample and mean IoU
+        over the 19 Cityscapes training classes.
+    """
     model.eval()
     total_loss = 0.0
     all_preds = []

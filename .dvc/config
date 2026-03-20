@@ -1,0 +1,4 @@
+[core]
+    remote = local-data
+['remote "local-data"']
+    url = /Users/vl.naumov/Desktop/courses/dvc-data
