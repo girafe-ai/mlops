@@ -1,0 +1,4 @@
+# @package _global_.model
+
+encoder: resnet34
+encoder_weights: imagenet

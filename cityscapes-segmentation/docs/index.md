@@ -5,13 +5,22 @@ Semantic segmentation of urban driving scenes using a UNet model trained on the
 
 ## Overview
 
-The project is structured around three main modules:
+The project ships two implementations under `cityscapes-segmentation/`:
 
+### `raw/` — plain PyTorch
 - **`data.py`** — dataset loading and preprocessing from local Cityscapes files
-- **`train.py`** — full training loop with checkpointing and validation
+- **`train.py`** — training loop with AMP, checkpointing and validation
 - **`infer.py`** — inference on single images or directories, with colourised output
+- **`utils.py`** — shared transforms and mIoU metric
 
-Shared helpers (transforms, mIoU metric) live in **`utils.py`**.
+### `lightning/` — PyTorch Lightning + Hydra
+- **`model.py`** — `SegmentationModel` (`LightningModule`) and training logic
+- **`data.py`** — `CityscapesDataModule` (`LightningDataModule`) for data loading
+- **`train.py`** — `Trainer`-based training script driven by Hydra config
+- **`infer.py`** — inference script driven by Hydra config
+- **`utils.py`** — shared transforms and mIoU metric
+
+All hyperparameters for the Lightning variant are managed through `conf/` (see the [Guide](guide.md)).
 
 ## Requirements
 

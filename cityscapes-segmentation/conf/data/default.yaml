@@ -1,0 +1,9 @@
+# @package _global_.data
+
+data_root: ../../data
+batch_size: 4
+num_workers: 4
+height: 512
+width: 1024
+# Set to an integer (e.g. 50) to cap each split for quick testing
+max_samples: null

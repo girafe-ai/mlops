@@ -1,0 +1,6 @@
+defaults:
+  - data: default
+  - model: default
+  - training: default
+  - inference: default
+  - _self_

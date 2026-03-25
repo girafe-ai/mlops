@@ -1,0 +1,7 @@
+# @package _global_.inference
+
+checkpoint: checkpoints/best.ckpt
+input: ../../data/leftImg8bit/val
+# Directory to write *_pred.png results; null saves alongside source images
+output_dir: null
+device: auto

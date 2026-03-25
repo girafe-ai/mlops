@@ -1,0 +1,10 @@
+# @package _global_.training
+
+epochs: 50
+lr: 1e-4
+weight_decay: 1e-4
+checkpoint_dir: checkpoints
+precision: "16-mixed"
+log_every_n_steps: 10
+seed: 42
+resume: null # Path to a .ckpt file to resume training, or null to start fresh

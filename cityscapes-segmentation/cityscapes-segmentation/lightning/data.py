@@ -1,21 +1,17 @@
-"""Cityscapes dataset loading and preprocessing.
-
-Provides :class:`CityscapesDataset` and the :func:`get_dataloader` factory
-for loading locally stored Cityscapes images and ground-truth masks.
+"""Cityscapes dataset and LightningDataModule.
 
 Expected data layout::
 
     data_root/
         leftImg8bit/{train,val,test}/{city}/*_leftImg8bit.png
         gtFine/{train,val,test}/{city}/*_gtFine_labelIds.png
-
-Download the dataset via ``scripts/download.py`` if not already present.
 """
 
 from pathlib import Path
 
 import albumentations as A
 import numpy as np
+import pytorch_lightning as pl
 from cityscapesscripts.helpers.labels import labels as cs_labels
 from PIL import Image
 from torch.utils.data import DataLoader, Dataset
@@ -35,17 +31,10 @@ for raw_id, train_id in ID_TO_TRAIN_ID.items():
 class CityscapesDataset(Dataset):
     """Cityscapes semantic segmentation dataset loaded from local files.
 
-    Expected directory layout::
-
-        data_root/
-            leftImg8bit/{split}/{city}/*_leftImg8bit.png
-            gtFine/{split}/{city}/*_gtFine_labelIds.png
-
     Args:
         data_root: Path to the root data directory.
         split: One of ``"train"``, ``"val"``, or ``"test"``.
         transforms: Optional albumentations ``Compose`` transform.
-            Defaults to resize + normalize (+ horizontal flip for train).
         height: Resize height in pixels.
         width: Resize width in pixels.
         max_samples: Cap the dataset at this many samples. ``None`` uses all.
@@ -54,7 +43,7 @@ class CityscapesDataset(Dataset):
     def __init__(
         self,
         data_root: str | Path,
-        split: str = "train",
+        split: str,
         transforms: A.Compose | None = None,
         height: int = 512,
         width: int = 1024,
@@ -96,27 +85,13 @@ class CityscapesDataset(Dataset):
             self.samples = self.samples[:max_samples]
 
     def __len__(self) -> int:
-        """Return the number of image–mask pairs in the split."""
         return len(self.samples)
 
     def __getitem__(self, idx: int) -> dict:
-        """Load, preprocess and return one sample.
-
-        Args:
-            idx: Index of the sample to retrieve.
-
-        Returns:
-            Dictionary with keys:
-
-            - ``"image"``: ``FloatTensor[3, H, W]`` — normalised RGB image.
-            - ``"mask"``: ``LongTensor[H, W]`` — per-pixel train IDs
-                (0–18); unlabelled pixels are set to ``255``.
-        """
         img_path, mask_path = self.samples[idx]
 
         image = np.array(Image.open(img_path).convert("RGB"), dtype=np.uint8)
         mask_raw = np.array(Image.open(mask_path), dtype=np.uint8)
-
         mask = ID_TO_TRAIN_ID_ARRAY[mask_raw]
 
         transformed = self.transforms(image=image, mask=mask)
@@ -126,44 +101,79 @@ class CityscapesDataset(Dataset):
         }
 
 
-def get_dataloader(
-    data_root: str | Path,
-    split: str,
-    batch_size: int = 4,
-    num_workers: int = 4,
-    height: int = 512,
-    width: int = 1024,
-    pin_memory: bool = True,
-    max_samples: int | None = None,
-) -> DataLoader:
-    """Return a DataLoader for the given Cityscapes split.
+class CityscapesDataModule(pl.LightningDataModule):
+    """LightningDataModule wrapping the Cityscapes dataset.
 
     Args:
         data_root: Path to the root data directory.
-        split: One of ``"train"``, ``"val"``, or ``"test"``.
-        batch_size: Number of samples per batch.
-        num_workers: Worker processes for data loading.
+        batch_size: Samples per batch.
+        num_workers: DataLoader worker processes.
         height: Resize height in pixels.
         width: Resize width in pixels.
-        pin_memory: Pin tensors to CUDA page-locked memory.
-        max_samples: Cap the dataset at this many samples. ``None`` uses all.
-
-    Returns:
-        Configured :class:`torch.utils.data.DataLoader`.
+        max_samples: Cap each split at this many samples. ``None`` uses all.
     """
-    dataset = CityscapesDataset(
-        data_root=data_root,
-        split=split,
-        height=height,
-        width=width,
-        max_samples=max_samples,
-    )
-    shuffle = split == "train"
-    return DataLoader(
-        dataset,
-        batch_size=batch_size,
-        shuffle=shuffle,
-        num_workers=num_workers,
-        pin_memory=pin_memory,
-        drop_last=shuffle,
-    )
+
+    def __init__(
+        self,
+        data_root: str,
+        batch_size: int,
+        num_workers: int,
+        height: int,
+        width: int,
+        max_samples: int | None,
+    ) -> None:
+        super().__init__()
+        self.save_hyperparameters()
+
+    def setup(self, stage: str | None = None) -> None:
+        if stage in ("fit", None):
+            self.train_ds = CityscapesDataset(
+                self.hparams.data_root,
+                "train",
+                height=self.hparams.height,
+                width=self.hparams.width,
+                max_samples=self.hparams.max_samples,
+            )
+            self.val_ds = CityscapesDataset(
+                self.hparams.data_root,
+                "val",
+                height=self.hparams.height,
+                width=self.hparams.width,
+                max_samples=self.hparams.max_samples,
+            )
+        if stage in ("test", None):
+            self.test_ds = CityscapesDataset(
+                self.hparams.data_root,
+                "test",
+                height=self.hparams.height,
+                width=self.hparams.width,
+                max_samples=self.hparams.max_samples,
+            )
+
+    def train_dataloader(self) -> DataLoader:
+        return DataLoader(
+            self.train_ds,
+            batch_size=self.hparams.batch_size,
+            shuffle=True,
+            num_workers=self.hparams.num_workers,
+            pin_memory=True,
+            drop_last=True,
+        )
+
+    def val_dataloader(self) -> DataLoader:
+        return DataLoader(
+            self.val_ds,
+            batch_size=self.hparams.batch_size,
+            shuffle=False,
+            num_workers=self.hparams.num_workers,
+            pin_memory=True,
+        )
+
+    def test_dataloader(self) -> DataLoader:
+        return DataLoader(
+            self.test_ds,
+            batch_size=self.hparams.batch_size,
+            shuffle=False,
+            num_workers=self.hparams.num_workers,
+            pin_memory=True,
+        )

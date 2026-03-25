@@ -29,7 +29,7 @@ log = logging.getLogger(__name__)
 # CONSTANTS
 # ---------------------------------------------------------------------------
 CHECKPOINT = "checkpoints/best.pth"
-INPUT = "../data/leftImg8bit/val"
+INPUT = "../../data/leftImg8bit/val"
 OUTPUT_DIR: str | None = None
 ENCODER = "resnet34"
 HEIGHT = 512

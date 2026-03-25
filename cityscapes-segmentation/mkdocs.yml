@@ -1,6 +1,6 @@
 site_name: Cityscapes Segmentation
 theme:
-  name: readthedocs
+  name: material
 
 nav:
   - Home: index.md
