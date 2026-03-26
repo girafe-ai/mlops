@@ -29,8 +29,8 @@ log = logging.getLogger(__name__)
 # CONSTANTS
 # ---------------------------------------------------------------------------
 DATA_ROOT = "../../data"
-EPOCHS = 50
-BATCH_SIZE = 4
+EPOCHS = 3
+BATCH_SIZE = 8
 LR = 1e-4
 ENCODER = "resnet34"
 ENCODER_WEIGHTS = "imagenet"

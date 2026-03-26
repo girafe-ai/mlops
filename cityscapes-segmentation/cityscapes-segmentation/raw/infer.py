@@ -30,7 +30,7 @@ log = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 CHECKPOINT = "checkpoints/best.pth"
 INPUT = "../../data/leftImg8bit/val"
-OUTPUT_DIR: str | None = None
+OUTPUT_DIR = "inference_results"
 ENCODER = "resnet34"
 HEIGHT = 512
 WIDTH = 1024

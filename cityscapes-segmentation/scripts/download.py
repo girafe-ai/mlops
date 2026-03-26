@@ -23,6 +23,7 @@ from cityscapesscripts.download.downloader import (
 
 DEFAULT_PACKAGES = [
     "gtFine_trainvaltest.zip",
+    "leftImg8bit_trainvaltest.zip"
 ]
 
 

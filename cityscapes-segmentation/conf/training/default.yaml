@@ -1,6 +1,6 @@
 # @package _global_.training
 
-epochs: 50
+epochs: 3
 lr: 1e-4
 weight_decay: 1e-4
 checkpoint_dir: checkpoints
