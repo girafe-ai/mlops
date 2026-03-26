@@ -30,6 +30,9 @@ docs = [
     "mkdocstrings[python]>=1.0.3",
 ]
 
+[tool.uv]
+http-timeout = 300
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

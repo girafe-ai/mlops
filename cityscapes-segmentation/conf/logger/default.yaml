@@ -1,0 +1,18 @@
+# @package _global_.logger
+
+type: wandb
+
+tensorboard:
+  save_dir: logs/tensorboard
+  name: cityscapes-segmentation
+  version: null
+
+mlflow:
+  tracking_uri: http://localhost:5000
+  experiment_name: cityscapes-segmentation
+  run_name: null
+
+wandb:
+  project: cityscapes-segmentation
+  name: null
+  save_dir: logs/wandb

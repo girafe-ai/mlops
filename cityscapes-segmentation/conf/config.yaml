@@ -3,4 +3,5 @@ defaults:
   - model: default
   - training: default
   - inference: default
+  - logger: default
   - _self_

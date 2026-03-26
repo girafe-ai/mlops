@@ -10,6 +10,7 @@ Usage:
 import hydra
 import pytorch_lightning as pl
 from data import CityscapesDataModule
+from loggers.resolver import get_logger
 from model import SegmentationModel
 from omegaconf import DictConfig
 from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
@@ -62,6 +63,7 @@ def train(cfg: DictConfig) -> None:
         max_epochs=cfg.training.epochs,
         precision=cfg.training.precision,
         callbacks=callbacks,
+        logger=get_logger(cfg),
         log_every_n_steps=cfg.training.log_every_n_steps,
         deterministic=False,
     )
