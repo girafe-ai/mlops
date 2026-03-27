@@ -21,10 +21,7 @@ from cityscapesscripts.download.downloader import (
     login,
 )
 
-DEFAULT_PACKAGES = [
-    "gtFine_trainvaltest.zip",
-    "leftImg8bit_trainvaltest.zip"
-]
+DEFAULT_PACKAGES = ["gtFine_trainvaltest.zip", "leftImg8bit_trainvaltest.zip"]
 
 
 class CityscapesDownloader:
