@@ -22,11 +22,11 @@ class SegmentationModel(pl.LightningModule):
 
     def __init__(
         self,
-        encoder: str = "resnet34",
-        encoder_weights: str = "imagenet",
-        lr: float = 1e-4,
-        weight_decay: float = 1e-4,
-        epochs: int = 50,
+        encoder: str,
+        encoder_weights: str,
+        lr: float,
+        weight_decay: float,
+        epochs: int,
     ) -> None:
         super().__init__()
         self.save_hyperparameters()

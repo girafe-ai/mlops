@@ -8,11 +8,11 @@ tensorboard:
   version: null
 
 mlflow:
-  tracking_uri: http://localhost:5000
+  tracking_uri: http://localhost:8080
   experiment_name: cityscapes-segmentation
   run_name: null
 
 wandb:
   project: cityscapes-segmentation
-  name: null
+  name: test-exp
   save_dir: logs/wandb
