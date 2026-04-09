@@ -1,0 +1,13 @@
+emb_dim: 128
+num_embeddings: 1000000
+
+embeddings_path: lastftm_factors.h5
+
+faiss_index_path: faiss_index.idx
+
+# qdrant
+collection_name: demo_collection
+port: 6333
+upload_batch_size: 500
+
+num_neighbours: 10
