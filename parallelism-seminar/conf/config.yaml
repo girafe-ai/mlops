@@ -1,0 +1,18 @@
+model:
+  vocab_size: 8192
+  block_size: 256
+  n_layer: 6
+  n_head: 8
+  d_model: 512
+  mlp_ratio: 4
+  dropout: 0.0
+
+train:
+  batch_size: 16
+  steps: 50
+  lr: 3e-4
+  seed: 0
+  log_interval: 10
+
+pipeline:
+  num_microbatches: 4
