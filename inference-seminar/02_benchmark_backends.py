@@ -1,9 +1,5 @@
 """Benchmark inference across PyTorch and ONNX Runtime backends."""
 
-from __future__ import annotations
-
-from pathlib import Path
-
 import hydra
 import pandas as pd
 import torch
@@ -20,6 +16,7 @@ from inference_seminar.cityscapes_adapter import (
     load_cityscapes_model,
     load_images_as_tensor_batch,
     resolve_device,
+    resolve_repo_path,
 )
 from inference_seminar.exporting import export_cityscapes_to_onnx
 from omegaconf import DictConfig
@@ -57,10 +54,12 @@ def benchmark_pytorch(
 
 @hydra.main(config_path="conf", config_name="config", version_base=None)
 def main(cfg: DictConfig) -> None:
-    artifacts_dir = Path(cfg.paths.artifacts_dir)
+    artifacts_dir = resolve_repo_path(cfg.paths.artifacts_dir)
     artifacts_dir.mkdir(parents=True, exist_ok=True)
-    Path(cfg.benchmark.trt_engine_cache_path).mkdir(parents=True, exist_ok=True)
-    onnx_path = Path(cfg.benchmark.onnx_path)
+    resolve_repo_path(cfg.benchmark.trt_engine_cache_path).mkdir(
+        parents=True, exist_ok=True
+    )
+    onnx_path = resolve_repo_path(cfg.benchmark.onnx_path)
     if not onnx_path.exists():
         exported_path, _, max_abs_diff = export_cityscapes_to_onnx(cfg)
         print(
@@ -103,7 +102,9 @@ def main(cfg: DictConfig) -> None:
         session, provider_name, notes = ort_session_for_backend(
             backend_name,
             onnx_path,
-            trt_engine_cache_path=cfg.benchmark.trt_engine_cache_path,
+            trt_engine_cache_path=resolve_repo_path(
+                cfg.benchmark.trt_engine_cache_path
+            ),
         )
         if session is None:
             results.append(
@@ -150,7 +151,7 @@ def main(cfg: DictConfig) -> None:
     df["num_images"] = len(image_names)
     df["height"] = cfg.model.height
     df["width"] = cfg.model.width
-    output_path = Path(cfg.benchmark.results_csv)
+    output_path = resolve_repo_path(cfg.benchmark.results_csv)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_path, index=False)
 

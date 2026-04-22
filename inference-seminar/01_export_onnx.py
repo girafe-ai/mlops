@@ -1,7 +1,5 @@
 """Export the Cityscapes segmentation model to ONNX."""
 
-from __future__ import annotations
-
 import hydra
 from inference_seminar.exporting import export_cityscapes_to_onnx
 from omegaconf import DictConfig

@@ -1,13 +1,12 @@
 """Demonstrate a custom ONNX operator executed via ONNX Runtime Extensions."""
 
-from __future__ import annotations
-
 from pathlib import Path
 
 import hydra
 import numpy as np
 import onnx
 import onnxruntime as ort
+from inference_seminar.cityscapes_adapter import resolve_repo_path
 from omegaconf import DictConfig
 from onnx import TensorProto, helper
 from onnxruntime_extensions import PyCustomOpDef, get_library_path, onnx_op
@@ -44,7 +43,7 @@ def build_model(model_path: Path) -> None:
 
 @hydra.main(config_path="conf", config_name="config", version_base=None)
 def main(cfg: DictConfig) -> None:
-    model_path = Path(cfg.custom_op.model_path)
+    model_path = resolve_repo_path(cfg.custom_op.model_path)
     model_path.parent.mkdir(parents=True, exist_ok=True)
     build_model(model_path)
 

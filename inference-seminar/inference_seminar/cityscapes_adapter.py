@@ -1,7 +1,5 @@
 """Bridge utilities for reusing the Cityscapes seminar model."""
 
-from __future__ import annotations
-
 import importlib
 import sys
 from pathlib import Path
@@ -11,6 +9,8 @@ import torch
 from PIL import Image
 
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff", ".webp"}
+SEMINAR_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = SEMINAR_ROOT.parent
 
 
 def resolve_device(device_name: str) -> torch.device:
@@ -18,6 +18,14 @@ def resolve_device(device_name: str) -> torch.device:
     if device_name == "auto":
         return torch.device("cuda" if torch.cuda.is_available() else "cpu")
     return torch.device(device_name)
+
+
+def resolve_repo_path(path_like: str | Path) -> Path:
+    """Resolve seminar config paths against the repository root."""
+    path = Path(path_like).expanduser()
+    if path.is_absolute():
+        return path
+    return (REPO_ROOT / path).resolve()
 
 
 def _append_cityscapes_lightning_dir(cityscapes_project_dir: Path) -> Path:
@@ -31,13 +39,13 @@ def _append_cityscapes_lightning_dir(cityscapes_project_dir: Path) -> Path:
 
 def load_lightning_module(cityscapes_project_dir: str | Path):
     """Import the Cityscapes Lightning module after adding its local path."""
-    _append_cityscapes_lightning_dir(Path(cityscapes_project_dir))
+    _append_cityscapes_lightning_dir(resolve_repo_path(cityscapes_project_dir))
     return importlib.import_module("model")
 
 
 def load_utils_module(cityscapes_project_dir: str | Path):
     """Import the Cityscapes utility module after adding its local path."""
-    _append_cityscapes_lightning_dir(Path(cityscapes_project_dir))
+    _append_cityscapes_lightning_dir(resolve_repo_path(cityscapes_project_dir))
     return importlib.import_module("utils")
 
 
@@ -49,7 +57,7 @@ def load_cityscapes_model(
     """Load the trained Cityscapes Lightning checkpoint."""
     model_module = load_lightning_module(cityscapes_project_dir)
     model = model_module.SegmentationModel.load_from_checkpoint(
-        str(checkpoint_path),
+        str(resolve_repo_path(checkpoint_path)),
         map_location=device,
     )
     model.eval()
@@ -68,9 +76,10 @@ def build_preprocess_transform(
 
 def collect_image_paths(input_dir: str | Path, limit: int | None = None) -> list[Path]:
     """Collect image paths recursively in a deterministic order."""
+    input_root = resolve_repo_path(input_dir)
     paths = [
         path
-        for path in sorted(Path(input_dir).rglob("*"))
+        for path in sorted(input_root.rglob("*"))
         if path.suffix.lower() in IMAGE_EXTENSIONS
     ]
     if limit is None:

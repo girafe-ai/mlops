@@ -1,7 +1,5 @@
 """Train a boosted-tree model and compare XGBoost inference with RAPIDS FIL."""
 
-from __future__ import annotations
-
 import time
 from pathlib import Path
 
@@ -10,6 +8,7 @@ import numpy as np
 import pandas as pd
 import torch
 import xgboost as xgb
+from inference_seminar.cityscapes_adapter import resolve_repo_path
 from omegaconf import DictConfig
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
@@ -28,9 +27,9 @@ def measure(fn, repeats: int) -> tuple[float, float]:
 
 @hydra.main(config_path="conf", config_name="config", version_base=None)
 def main(cfg: DictConfig) -> None:
-    artifacts_dir = Path(cfg.paths.artifacts_dir)
+    artifacts_dir = resolve_repo_path(cfg.paths.artifacts_dir)
     artifacts_dir.mkdir(parents=True, exist_ok=True)
-    model_path = Path(cfg.fil.model_path)
+    model_path = resolve_repo_path(cfg.fil.model_path)
     model_path.parent.mkdir(parents=True, exist_ok=True)
 
     X, y = make_classification(
@@ -121,7 +120,7 @@ def main(cfg: DictConfig) -> None:
         )
 
     df = pd.DataFrame(rows)
-    output_path = Path(cfg.fil.results_csv)
+    output_path = resolve_repo_path(cfg.fil.results_csv)
     df.to_csv(output_path, index=False)
     print(df.to_string(index=False))
     print(f"\nSaved FIL benchmark results to: {output_path}")

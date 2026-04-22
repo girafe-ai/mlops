@@ -1,7 +1,5 @@
 """Small helpers for inference timing and statistics."""
 
-from __future__ import annotations
-
 import statistics
 import time
 from dataclasses import dataclass

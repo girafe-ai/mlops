@@ -1,7 +1,5 @@
 """Reusable ONNX export utilities for the seminar."""
 
-from __future__ import annotations
-
 from pathlib import Path
 
 import numpy as np
@@ -17,12 +15,13 @@ from inference_seminar.cityscapes_adapter import (
     load_images_as_tensor_batch,
     make_random_input,
     resolve_device,
+    resolve_repo_path,
 )
 
 
 def export_cityscapes_to_onnx(cfg: DictConfig) -> tuple[Path, int, float]:
     """Export the configured Cityscapes checkpoint to ONNX and validate parity."""
-    artifacts_dir = Path(cfg.paths.artifacts_dir)
+    artifacts_dir = resolve_repo_path(cfg.paths.artifacts_dir)
     artifacts_dir.mkdir(parents=True, exist_ok=True)
 
     device = resolve_device(cfg.model.device)
@@ -52,7 +51,7 @@ def export_cityscapes_to_onnx(cfg: DictConfig) -> tuple[Path, int, float]:
         )
 
     batch = batch.to(device)
-    onnx_path = Path(cfg.export.onnx_path)
+    onnx_path = resolve_repo_path(cfg.export.onnx_path)
     dynamic_axes = None
     if cfg.model.dynamic_axes:
         dynamic_axes = {
