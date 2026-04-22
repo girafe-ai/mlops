@@ -1,0 +1,20 @@
+# @package _global_.fil
+
+device: auto
+dataset:
+  n_samples: 20000
+  n_features: 64
+  n_informative: 24
+  n_classes: 8
+  random_state: 42
+training:
+  max_depth: 8
+  n_estimators: 300
+  learning_rate: 0.08
+  subsample: 0.9
+  colsample_bytree: 0.9
+inference:
+  batch_size: 4096
+  repeats: 50
+results_csv: ${paths.artifacts_dir}/fil_benchmarks.csv
+model_path: ${paths.artifacts_dir}/xgboost_model.ubj

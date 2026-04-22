@@ -1,0 +1,8 @@
+# @package _global_.custom_op
+
+model_path: ${paths.artifacts_dir}/custom_add_one.onnx
+input_values:
+  - 1.0
+  - 2.5
+  - 7.0
+expected_delta: 1.0
