@@ -1,0 +1,7 @@
+# @package _global_.export
+
+onnx_path: ${paths.artifacts_dir}/cityscapes_unet.onnx
+parity_atol: 1e-4
+parity_rtol: 1e-3
+input_mode: random
+seed: 42
