@@ -1,0 +1,8 @@
+defaults:
+  - paths: default
+  - model: cityscapes_unet
+  - export: default
+  - benchmark: default
+  - custom_op: default
+  - fil: default
+  - _self_

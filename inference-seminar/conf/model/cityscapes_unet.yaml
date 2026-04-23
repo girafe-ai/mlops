@@ -1,0 +1,10 @@
+# @package _global_.model
+
+encoder: resnet34
+encoder_weights: imagenet
+height: 512
+width: 1024
+batch_size: 1
+device: auto
+opset: 17
+dynamic_axes: true
