@@ -3,10 +3,9 @@
 onnx_path: ${export.onnx_path}
 providers:
   - pytorch
-  - cpu
   - cuda
   - tensorrt
-num_images: 8
+num_images: 5
 warmup_runs: 3
 timed_runs: 20
 seed: 42

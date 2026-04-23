@@ -2,7 +2,7 @@
 
 device: auto
 dataset:
-  n_samples: 20000
+  n_samples: 2000000
   n_features: 64
   n_informative: 24
   n_classes: 8
@@ -14,7 +14,7 @@ training:
   subsample: 0.9
   colsample_bytree: 0.9
 inference:
-  batch_size: 4096
+  batch_size: 128000
   repeats: 50
 results_csv: ${paths.artifacts_dir}/fil_benchmarks.csv
 model_path: ${paths.artifacts_dir}/xgboost_model.ubj

@@ -1,5 +1,7 @@
 """Benchmark inference across PyTorch and ONNX Runtime backends."""
 
+import gc
+
 import hydra
 import pandas as pd
 import torch
@@ -122,30 +124,50 @@ def main(cfg: DictConfig) -> None:
             )
             continue
 
-        stats = measure_callable(
-            lambda: run_ort_session(session, ort_input),
-            warmup_runs=int(cfg.benchmark.warmup_runs),
-            timed_runs=int(cfg.benchmark.timed_runs),
-            batch_size=ort_input.shape[0],
-            device=torch.device("cuda")
-            if provider_name != "CPUExecutionProvider"
-            else None,
-        )
-        output = run_ort_session(session, ort_input)
-        max_abs_diff = float(abs(output - reference_output).max())
-        results.append(
-            BackendResult(
-                backend=backend_name,
-                available=True,
-                provider=provider_name,
-                mean_ms=stats.mean_ms,
-                median_ms=stats.median_ms,
-                p95_ms=stats.p95_ms,
-                throughput_items_per_s=stats.throughput_items_per_s,
-                max_abs_diff_vs_pytorch=max_abs_diff,
-                notes=notes,
+        try:
+            stats = measure_callable(
+                lambda: run_ort_session(session, ort_input),
+                warmup_runs=int(cfg.benchmark.warmup_runs),
+                timed_runs=int(cfg.benchmark.timed_runs),
+                batch_size=ort_input.shape[0],
+                device=torch.device("cuda")
+                if provider_name != "CPUExecutionProvider"
+                else None,
             )
-        )
+            output = run_ort_session(session, ort_input)
+            max_abs_diff = float(abs(output - reference_output).max())
+            results.append(
+                BackendResult(
+                    backend=backend_name,
+                    available=True,
+                    provider=provider_name,
+                    mean_ms=stats.mean_ms,
+                    median_ms=stats.median_ms,
+                    p95_ms=stats.p95_ms,
+                    throughput_items_per_s=stats.throughput_items_per_s,
+                    max_abs_diff_vs_pytorch=max_abs_diff,
+                    notes=notes,
+                )
+            )
+        except Exception as exc:  # noqa: BLE001
+            results.append(
+                BackendResult(
+                    backend=backend_name,
+                    available=False,
+                    provider=provider_name,
+                    mean_ms=None,
+                    median_ms=None,
+                    p95_ms=None,
+                    throughput_items_per_s=None,
+                    max_abs_diff_vs_pytorch=None,
+                    notes=f"{notes} Runtime failure: {exc}".strip(),
+                )
+            )
+        finally:
+            del session
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
 
     df = pd.DataFrame([result.__dict__ for result in results])
     df["num_images"] = len(image_names)

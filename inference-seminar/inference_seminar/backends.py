@@ -23,6 +23,26 @@ class BackendResult:
     notes: str = ""
 
 
+def get_available_ort_providers() -> list[str]:
+    """Return available ONNX Runtime providers across minor API differences."""
+    if hasattr(ort, "get_available_providers"):
+        return list(ort.get_available_providers())
+
+    if hasattr(ort, "get_all_providers"):
+        return list(ort.get_all_providers())
+
+    capi = getattr(ort, "capi", None)
+    pybind_state = getattr(capi, "_pybind_state", None) if capi is not None else None
+    if pybind_state is not None and hasattr(pybind_state, "get_available_providers"):
+        return list(pybind_state.get_available_providers())
+
+    raise AttributeError(
+        "Could not discover ONNX Runtime providers. "
+        "Please check `import onnxruntime as ort; print(ort.__file__, getattr(ort, '__version__', 'unknown'))` "
+        "to confirm the expected package is installed."
+    )
+
+
 def ort_session_for_backend(
     backend: str,
     model_path: str | Path,
@@ -30,7 +50,7 @@ def ort_session_for_backend(
     trt_engine_cache_path: str | Path | None = None,
 ) -> tuple[ort.InferenceSession | None, str, str]:
     """Build an ONNX Runtime session for a named backend."""
-    available = ort.get_available_providers()
+    available = get_available_ort_providers()
     session_options = ort.SessionOptions()
 
     if backend == "cpu":
