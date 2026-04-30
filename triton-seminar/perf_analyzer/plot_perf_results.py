@@ -43,8 +43,8 @@ def load_results() -> pd.DataFrame:
         )
         latency_col = find_column(
             df,
-            ("Avg latency", "Average latency", "Avg Latency", "Client Avg Latency"),
-            contains=("avg", "latency"),
+            ("p95 latency"),
+            contains=("p95", "latency"),
         )
 
         slim = pd.DataFrame(
@@ -52,10 +52,10 @@ def load_results() -> pd.DataFrame:
                 "model_name": model_name,
                 "concurrency": pd.to_numeric(df[concurrency_col]),
                 "throughput": pd.to_numeric(df[throughput_col]),
-                "latency_avg_us": pd.to_numeric(df[latency_col]),
+                "latency_p95_us": pd.to_numeric(df[latency_col]),
             }
         )
-        slim["latency_avg_ms"] = slim["latency_avg_us"] / 1000.0
+        slim["latency_p95_ms"] = slim["latency_p95_us"] / 1000.0
         frames.append(slim)
 
     if not frames:
@@ -67,6 +67,7 @@ def plot_metric(df: pd.DataFrame, metric: str, ylabel: str, filename: str) -> No
     fig, ax = plt.subplots(figsize=(8, 5))
     for model_name, group in df.groupby("model_name"):
         group = group.sort_values("concurrency")
+        print(group)
         ax.plot(group["concurrency"], group[metric], marker="o", label=model_name)
     ax.set_xlabel("Concurrency")
     ax.set_ylabel(ylabel)
@@ -83,8 +84,8 @@ def main() -> None:
 
     plot_metric(
         df,
-        metric="latency_avg_ms",
-        ylabel="Average latency, ms",
+        metric="latency_p95_ms",
+        ylabel="p95 latency, ms",
         filename="latency_avg_vs_concurrency.png",
     )
     plot_metric(
