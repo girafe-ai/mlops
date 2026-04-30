@@ -101,3 +101,10 @@ services:
       tritonserver
       --model-repository=/models
       --log-verbose=1
+
+  perf-analyzer:
+    image: nvcr.io/nvidia/tritonserver:24.02-py3-sdk
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    entrypoint: ["perf_analyzer"]
