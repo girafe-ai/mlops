@@ -25,7 +25,7 @@ run_perf() {
     --measurement-interval "$MEASUREMENT_INTERVAL_MS" \
     --input-data random \
     --shape "$shape" \
-    --batch-size "$batch_size" \
+    -b "$batch_size" \
     -f "$output_csv"
 }
 

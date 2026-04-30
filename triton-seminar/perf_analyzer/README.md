@@ -61,7 +61,7 @@ The baseline model has `max_batch_size: 0`, so the request shape includes the le
 input:1,3,1024,2048
 ```
 
-The dynamic model has `max_batch_size > 0`, so Triton owns the batch dimension. Perf Analyzer uses `--batch-size 1` and the tensor shape excludes batch:
+The dynamic model has `max_batch_size > 0`, so Triton owns the batch dimension. Perf Analyzer uses `-b 1` and the tensor shape excludes batch:
 
 ```text
 input:3,1024,2048
