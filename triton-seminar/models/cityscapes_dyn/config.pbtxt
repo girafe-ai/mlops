@@ -1,7 +1,7 @@
 name: "cityscapes_dyn"
 platform: "tensorrt_plan"
 
-max_batch_size: 2
+max_batch_size: 4
 
 input [
   {
@@ -20,6 +20,6 @@ output [
 ]
 
 dynamic_batching {
-  preferred_batch_size: [ 2 ]
+  preferred_batch_size: [ 4 ]
   max_queue_delay_microseconds: 10000
 }
