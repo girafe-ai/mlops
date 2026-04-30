@@ -206,6 +206,21 @@ The plotting script reads `results/load_test_summary.csv` and generates:
 
 If both models or multiple batch sizes exist in the summary CSV, the plots show separate lines for each model and batch size.
 
+## Perf Analyzer Benchmark
+
+Triton's native Perf Analyzer workflow lives in `perf_analyzer/`.
+
+```bash
+sudo docker compose up triton
+bash perf_analyzer/run_perf_analyzer.sh
+python perf_analyzer/plot_perf_results.py
+```
+
+It writes CSV outputs and two plots:
+
+- `perf_analyzer/results/plots/latency_avg_vs_concurrency.png`
+- `perf_analyzer/results/plots/throughput_vs_concurrency.png`
+
 ## Troubleshooting
 
 - Missing `assets/cityscapes_unet.onnx`: place the ONNX model at that path.
