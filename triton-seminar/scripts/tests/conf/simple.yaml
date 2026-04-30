@@ -1,0 +1,5 @@
+url: localhost:8000
+model_name: cityscapes
+height: 1024
+width: 2048
+batch_size: 1

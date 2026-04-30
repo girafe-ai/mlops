@@ -1,0 +1,40 @@
+name: "segmentation_postprocess"
+backend: "python"
+max_batch_size: 0
+
+input [
+  {
+    name: "LOGITS"
+    data_type: TYPE_FP32
+    dims: [ 1, 19, 1024, 2048 ]
+  }
+]
+
+output [
+  {
+    name: "PRED_MASK"
+    data_type: TYPE_UINT8
+    dims: [ 1, 1024, 2048 ]
+  },
+  {
+    name: "COLOR_MASK"
+    data_type: TYPE_UINT8
+    dims: [ 1, 1024, 2048, 3 ]
+  },
+  {
+    name: "CLASS_HISTOGRAM"
+    data_type: TYPE_UINT64
+    dims: [ 19 ]
+  },
+  {
+    name: "MEAN_CONFIDENCE"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+
+instance_group [
+  {
+    kind: KIND_CPU
+  }
+]
