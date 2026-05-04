@@ -42,7 +42,7 @@ This checks that Docker containers can see the GPU through the NVIDIA runtime.
 sudo docker compose run --rm trtexec-build
 ```
 
-This converts `assets/cityscapes_unet.onnx` into `assets/cityscapes_unet.plan`. The engine profile uses max batch 2 first because the target GPU may have only 8 GB VRAM.
+This converts `assets/cityscapes_unet.onnx` into `assets/cityscapes_unet.plan`. The engine profile uses max batch 4 first because the target GPU may have only 8 GB VRAM.
 
 ## Benchmark Raw TensorRT Engine
 
