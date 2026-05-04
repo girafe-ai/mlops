@@ -1,0 +1,25 @@
+name: "cityscapes_dyn"
+platform: "tensorrt_plan"
+
+max_batch_size: 4
+
+input [
+  {
+    name: "input"
+    data_type: TYPE_FP32
+    dims: [ 3, 1024, 2048 ]
+  }
+]
+
+output [
+  {
+    name: "logits"
+    data_type: TYPE_FP32
+    dims: [ 19, 1024, 2048 ]
+  }
+]
+
+dynamic_batching {
+  preferred_batch_size: [ 1, 2, 4 ]
+  max_queue_delay_microseconds: 1000
+}

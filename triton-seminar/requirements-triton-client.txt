@@ -1,0 +1,6 @@
+numpy
+tritonclient[http]
+matplotlib
+pandas
+pillow
+hydra-core

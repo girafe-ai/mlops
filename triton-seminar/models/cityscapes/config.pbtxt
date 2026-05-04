@@ -1,0 +1,20 @@
+name: "cityscapes"
+platform: "tensorrt_plan"
+
+max_batch_size: 0
+
+input [
+  {
+    name: "input"
+    data_type: TYPE_FP32
+    dims: [ -1, 3, 1024, 2048 ]
+  }
+]
+
+output [
+  {
+    name: "logits"
+    data_type: TYPE_FP32
+    dims: [ -1, 19, 1024, 2048 ]
+  }
+]

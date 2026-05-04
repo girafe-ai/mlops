@@ -1,0 +1,110 @@
+services:
+  trtexec-build:
+    image: nvcr.io/nvidia/tensorrt:24.02-py3
+    runtime: nvidia
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    ipc: host
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    command: >
+      trtexec
+      --onnx=assets/cityscapes_unet.onnx
+      --saveEngine=assets/cityscapes_unet.plan
+      --fp16
+      --minShapes=input:1x3x1024x2048
+      --optShapes=input:2x3x1024x2048
+      --maxShapes=input:4x3x1024x2048
+      --verbose
+
+  trtexec-benchmark-b1:
+    image: nvcr.io/nvidia/tensorrt:24.02-py3
+    runtime: nvidia
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    ipc: host
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    command: >
+      trtexec
+      --loadEngine=assets/cityscapes_unet.plan
+      --shapes=input:1x3x1024x2048
+      --warmUp=500
+      --duration=30
+      --useSpinWait
+
+  trtexec-benchmark-b2:
+    image: nvcr.io/nvidia/tensorrt:24.02-py3
+    runtime: nvidia
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    ipc: host
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    command: >
+      trtexec
+      --loadEngine=assets/cityscapes_unet.plan
+      --shapes=input:4x3x1024x2048
+      --warmUp=500
+      --duration=30
+      --useSpinWait
+
+  triton:
+    image: nvcr.io/nvidia/tritonserver:24.02-py3
+    runtime: nvidia
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    ports:
+      - "8000:8000"   # HTTP
+      - "8001:8001"   # gRPC
+      - "8002:8002"   # Prometheus metrics
+    volumes:
+      - ./models:/models
+    command: >
+      tritonserver
+      --model-repository=/models
+      --log-verbose=1
+
+  triton-pipeline:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.triton-pipeline
+    image: triton-seminar-pipeline:24.02
+    runtime: nvidia
+    shm_size: "2gb"
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    ports:
+      - "8100:8000"   # HTTP
+      - "8101:8001"   # gRPC
+      - "8102:8002"   # Prometheus metrics
+    volumes:
+      - ./models_pipeline:/models
+    command: >
+      tritonserver
+      --model-repository=/models
+      --log-verbose=1
+
+  perf-analyzer:
+    image: nvcr.io/nvidia/tritonserver:24.02-py3-sdk
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    entrypoint: ["perf_analyzer"]
