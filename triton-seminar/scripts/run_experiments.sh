@@ -29,11 +29,11 @@ run_profile() {
 }
 
 for model_name in cityscapes cityscapes_dyn; do
-  for concurrency in 1 2 4 8; do
+  for concurrency in 1 4 8 16; do
     run_profile "$model_name" "$concurrency" 1
   done
 done
 
-for concurrency in 1 2 4; do
-  run_profile cityscapes_dyn "$concurrency" 2
+for concurrency in 1 4 8 16; do
+  run_profile cityscapes_dyn "$concurrency" 4
 done
