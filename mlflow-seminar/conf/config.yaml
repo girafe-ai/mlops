@@ -1,0 +1,20 @@
+defaults:
+  - register: default
+  - _self_
+
+mlflow:
+  tracking_uri: sqlite:///mlflow.db
+  experiment: mlflow-cityscapes-serving
+  run_name: register-cityscapes-pyfunc
+  model_name: cityscapes-segmentation
+  alias: champion
+
+model:
+  height: 512
+  width: 1024
+  device: auto
+
+test:
+  image: assets/cityscapes_example.jpeg
+  input_mode: base64
+  url: http://127.0.0.1:5001/invocations

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512" role="img" aria-label="Waiting for upload">
+  <rect width="1024" height="512" fill="#e8eef1"/>
+  <path d="M0 372h1024v140H0z" fill="#cdd8de"/>
+  <path d="M120 355h180l44 157H90zM715 345h165l68 167H666z" fill="#aebec7"/>
+  <path d="M0 298h1024v86H0z" fill="#b9c8cf"/>
+  <circle cx="445" cy="240" r="28" fill="#8da0aa"/>
+  <circle cx="580" cy="240" r="28" fill="#8da0aa"/>
+  <path d="M400 255h225v46H400z" fill="#708792"/>
+</svg>

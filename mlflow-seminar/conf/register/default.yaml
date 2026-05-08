@@ -1,0 +1,5 @@
+# Paths are resolved relative to the mlflow-seminar directory.
+
+checkpoint: ../cityscapes-segmentation/checkpoints/best.ckpt
+lightning_code: ../cityscapes-segmentation/cityscapes-segmentation/lightning
+example_image: assets/cityscapes_example.jpeg

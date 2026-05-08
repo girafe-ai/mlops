@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cityscapes Segmentation</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="toolbar">
+        <div>
+          <h1>Cityscapes Segmentation</h1>
+          <p>MLflow Registry alias: <strong>champion</strong></p>
+        </div>
+        <label class="upload">
+          <input id="fileInput" type="file" accept="image/*" />
+          Upload image
+        </label>
+      </section>
+
+      <section class="viewer">
+        <figure>
+          <figcaption>Original</figcaption>
+          <img id="originalImage" src="/static/placeholder.svg" alt="Original upload" />
+        </figure>
+        <figure>
+          <figcaption>Overlay</figcaption>
+          <img id="overlayImage" src="/static/placeholder.svg" alt="Segmentation overlay" />
+        </figure>
+        <figure>
+          <figcaption>Mask</figcaption>
+          <img id="maskImage" src="/static/placeholder.svg" alt="Segmentation mask" />
+        </figure>
+      </section>
+
+      <section class="results">
+        <div class="confidence">
+          <span>Mean confidence</span>
+          <strong id="confidenceValue">-</strong>
+        </div>
+        <div id="histogram" class="histogram"></div>
+      </section>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
