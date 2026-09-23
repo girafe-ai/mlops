@@ -2,8 +2,12 @@
 
 ## Downloading Cityscapes
 
-Register for a Cityscapes account and accept the dataset terms before downloading. Create
-your local credentials file before running the downloader.
+Register for a Cityscapes account and accept the dataset terms before downloading.
+From the repository root, enter the tools directory:
+
+```bash
+cd cityscapes-tools
+```
 
 ### Local credentials
 
@@ -20,6 +24,8 @@ CITYSCAPES_USERNAME=your-email-or-username
 CITYSCAPES_PASSWORD=your-password
 ```
 
+### Download into the repository
+
 Check the downloader's command and defaults without contacting Cityscapes or changing
 files:
 
@@ -27,11 +33,15 @@ files:
 uv run python scripts/download_cityscapes.py download --dry-run
 ```
 
-Download the standard left images and fine annotations to `data/cityscapes`:
+Download the standard left images and fine annotations:
 
 ```bash
 uv run python scripts/download_cityscapes.py download
 ```
+
+This saves `leftImg8bit_trainvaltest.zip` and `gtFine_trainvaltest.zip` under
+`cityscapes-tools/data/cityscapes/` in your local repository. The downloader
+verifies each archive's MD5 checksum; it does not extract the archives.
 
 Pass other comma-separated package names from your Cityscapes download page when
 needed:
