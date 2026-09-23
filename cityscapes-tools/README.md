@@ -3,11 +3,17 @@
 ## Downloading Cityscapes
 
 Register for a Cityscapes account and accept the dataset terms before downloading. Create
-your ignored `.env` file from the committed template, then add your credentials:
+your local credentials file before running the downloader.
+
+### Local credentials
+
+Copy `.env.example` to `.env`:
 
 ```bash
 cp .env.example .env
 ```
+
+Fill in your Cityscapes credentials in the local `.env` file:
 
 ```dotenv
 CITYSCAPES_USERNAME=your-email-or-username
