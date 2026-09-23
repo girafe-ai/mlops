@@ -37,3 +37,33 @@ To publish a build to PyPI, put a project-scoped PyPI API token in `.env` as
 ```bash
 uv publish
 ```
+
+## Download dataset
+
+Run the following commands from the `cityscapes-tools` directory. Check the
+downloader's defaults without contacting Cityscapes or changing files:
+
+```bash
+uv run python scripts/download_cityscapes.py download --dry-run
+```
+
+Download the standard left images and fine annotations:
+
+```bash
+uv run python scripts/download_cityscapes.py download
+```
+
+This saves `leftImg8bit_trainvaltest.zip` and `gtFine_trainvaltest.zip` under
+`cityscapes-tools/data/cityscapes/` in your local repository. The downloader
+verifies each archive's MD5 checksum; it does not extract the archives.
+
+Pass other comma-separated package names from your Cityscapes download page when
+needed:
+
+```bash
+uv run python scripts/download_cityscapes.py download \
+  --packages=leftImg8bit_trainvaltest.zip,gtFine_trainvaltest.zip \
+  --destination=data/cityscapes
+```
+
+Use `--resume` to continue an interrupted download.
