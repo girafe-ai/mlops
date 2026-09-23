@@ -1,0 +1,55 @@
+# cityscapes-tools
+
+## Downloading Cityscapes
+
+Register for a Cityscapes account and accept the dataset terms before downloading. Create
+your ignored `.env` file from the committed template, then add your credentials:
+
+```bash
+cp .env.example .env
+```
+
+```dotenv
+CITYSCAPES_USERNAME=your-email-or-username
+CITYSCAPES_PASSWORD=your-password
+```
+
+Check the downloader's command and defaults without contacting Cityscapes or changing
+files:
+
+```bash
+uv run python scripts/download_cityscapes.py download --dry-run
+```
+
+Download the standard left images and fine annotations to `data/cityscapes`:
+
+```bash
+uv run python scripts/download_cityscapes.py download
+```
+
+Pass other comma-separated package names from your Cityscapes download page when
+needed:
+
+```bash
+uv run python scripts/download_cityscapes.py download \
+  --packages=leftImg8bit_trainvaltest.zip,gtFine_trainvaltest.zip \
+  --destination=data/cityscapes
+```
+
+Use `--resume` to continue an interrupted download. The downloader verifies each
+completed file against the MD5 checksum supplied by Cityscapes.
+
+## Building and publishing
+
+Build source and wheel distributions with:
+
+```bash
+uv build
+```
+
+To publish a build to PyPI, put a project-scoped PyPI API token in `.env` as
+`UV_PUBLISH_TOKEN`, then run:
+
+```bash
+uv publish
+```
