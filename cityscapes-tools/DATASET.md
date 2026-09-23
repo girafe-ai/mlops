@@ -11,5 +11,3 @@ street scenes from 50 cities for semantic and instance segmentation. It includes
 and accept the [dataset terms](https://www.cityscapes-dataset.com/license/)
 before downloading. Set up local credentials as described in
 [README.md](README.md#local-credentials).
-
-Be careful about memory on your device!
