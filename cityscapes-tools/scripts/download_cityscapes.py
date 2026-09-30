@@ -11,5 +11,8 @@ Examples:
 import fire
 from cityscapes_tools.downloader import download
 
+
+
+
 if __name__ == "__main__":
     fire.Fire({"download": download})
