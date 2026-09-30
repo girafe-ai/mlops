@@ -1,0 +1,21 @@
+site_name: Cityscapes tools
+site_description: Local tools for downloading the Cityscapes dataset
+
+nav:
+  - Home: index.md
+  - Dataset: dataset.md
+  - Download: download.md
+  - Python API: api.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            members_order: source
+            show_root_heading: true
+            show_root_full_path: false
+            show_source: false

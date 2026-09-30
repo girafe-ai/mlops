@@ -26,17 +26,35 @@
 - Do not make network requests or download Cityscapes data unless explicitly
   requested.
 
+## MkDocs
+
+- MkDocs is a `cityscapes-tools` development dependency. Run `uv sync --dev`
+  from that directory to install the locked development environment.
+- Keep MkDocs configuration in `cityscapes-tools/mkdocs.yml` and site pages in
+  `cityscapes-tools/docs/`.
+- Generate the Python API page from function and class docstrings with
+  `mkdocstrings[python]`; keep its `src` path and Google-style parser configured
+  in `mkdocs.yml` rather than copying API descriptions into Markdown.
+- When adding new logic in a module, class, function, or source file, add a
+  suitable explanation or usage block to the relevant page under
+  `cityscapes-tools/docs/`. Add an `:::` API directive for a new public object
+  when an existing module directive does not already include it.
+- Keep instructions about MkDocs setup, maintenance, and commands in this file.
+- From `cityscapes-tools/`, run `uv run mkdocs serve` to preview the site and
+  `uv run mkdocs build --strict` to verify it.
+- The generated `cityscapes-tools/site/` directory is build output; do not commit it.
+
 ## Changelog
 
 When modifying Cityscapes package code, its CLI, or user-facing documentation:
 
 1. Review the completed diff before reporting the task as finished.
-2. If the change is user-visible, update
-   `cityscapes-tools/CHANGELOG.md` under `## [Unreleased]`.
-3. Add one concise English bullet under `Added`, `Changed`, or `Fixed`.
-4. Skip changelog entries for tests, CI, formatting, lockfile-only updates, and
+2. If the change is user-visible, add one concise English bullet to
+   `cityscapes-tools/CHANGELOG.md` under its date (`## YYYY-MM-DD`), with the
+   newest date first. Use the commit date when the change is committed.
+3. Skip changelog entries for tests, CI, formatting, lockfile-only updates, and
    internal refactors with no user-visible effect.
-5. Do not change the package version, create a release, commit, or push unless
+4. Do not change the package version, create a release, commit, or push unless
    the user explicitly asks.
 
 ## Verification

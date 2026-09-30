@@ -20,4 +20,7 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "fire>=0.7.1",
+    "mkdocs>=1.6.1",
+    "mkdocstrings[python]>=1.0.6",
+    "pytest>=9.1.1",
 ]
