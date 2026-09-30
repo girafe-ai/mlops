@@ -1,0 +1,17 @@
+name: Pre-commit
+
+on:
+  pull_request:
+    branches: [26f_mipt]
+
+permissions:
+  contents: read
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      - name: Run pre-commit on all files
+        run: uvx --from pre-commit==4.6.2 pre-commit run --all-files
