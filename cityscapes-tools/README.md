@@ -1,6 +1,7 @@
 # cityscapes-tools
 
-For dataset details and download instructions, see [DATASET.md](DATASET.md).
+For dataset details and official resources, see the [dataset guide](docs/dataset.md).
+Download instructions are below.
 
 ## Local credentials
 
