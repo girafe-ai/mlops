@@ -4,3 +4,5 @@ dist/
 site/
 __pycache__/
 *.py[cod]
+outputs/
+data/cityscapes/*.zip

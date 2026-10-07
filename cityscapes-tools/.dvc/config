@@ -1,0 +1,4 @@
+[core]
+    remote = cityscapes-dvc-remote
+['remote "cityscapes-dvc-remote"']
+    url = /Users/vl.naumov/Desktop/courses/cityscapes-dvc-remote

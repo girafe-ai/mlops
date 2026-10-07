@@ -1,0 +1,5 @@
+annotations_root: data/cityscapes/gtFine
+images_root: data/cityscapes/leftImg8bit
+metadata_dir: data/metadata
+filtered_manifest_path: data/processed/filtered_manifest.csv
+summary_path: reports/filtered_summary.json

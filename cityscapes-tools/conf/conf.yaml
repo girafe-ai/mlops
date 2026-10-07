@@ -1,0 +1,9 @@
+defaults:
+  - data: data
+  - preprocess: preprocess
+  - database: postgres
+  - _self_
+
+hydra:
+  job:
+    chdir: false

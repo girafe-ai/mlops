@@ -5,6 +5,7 @@ nav:
   - Home: index.md
   - Dataset: dataset.md
   - Download: download.md
+  - DVC and PostgreSQL pipeline: pipeline.md
   - Python API: api.md
 
 plugins:

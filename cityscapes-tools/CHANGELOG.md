@@ -2,6 +2,10 @@
 
 Changes to Cityscapes tools, by date. Newest first.
 
+## 2026-10-07
+
+- Build reproducible Cityscapes metadata and filtered manifests with DVC, Hydra, and a local PostgreSQL database.
+
 ## 2026-10-01
 
 - Find dataset information in the MkDocs guide; the separate `DATASET.md` file has been removed.

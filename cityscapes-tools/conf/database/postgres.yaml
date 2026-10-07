@@ -1,0 +1,5 @@
+host: localhost
+port: 5432
+name: cityscapes
+user: cityscapes
+password_env: POSTGRES_PASSWORD
