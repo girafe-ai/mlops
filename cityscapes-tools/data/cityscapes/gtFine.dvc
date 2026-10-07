@@ -1,0 +1,6 @@
+outs:
+- md5: 8e4180e3d9cf440cec1494b1af0dbda2.dir
+  size: 808625557
+  nfiles: 20000
+  hash: md5
+  path: gtFine
