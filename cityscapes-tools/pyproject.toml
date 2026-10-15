@@ -7,14 +7,23 @@ requires-python = ">=3.10"
 dependencies = [
     "dvc>=3.67.1",
     "hydra-core>=1.3.7",
+    "lightning>=2.6.6",
+    "mlflow>=3.17.1",
     "numpy>=2.2.6",
     "pandas>=2.3.3",
     "psycopg[binary]>=3.3.6",
     "requests>=2.34.2",
+    "torch>=2.14.1",
+    "torchmetrics>=1.9.0",
+    "torchvision>=0.29.1",
 ]
 
 [project.scripts]
-cityscapes-tools = "cityscapes_tools:main"
+cityscapes-download = "cityscapes_tools.cli.download:main"
+cityscapes-build-metadata = "cityscapes_tools.cli.build_metadata:main"
+cityscapes-materialize = "cityscapes_tools.cli.materialize_dataset:main"
+cityscapes-train-torch = "cityscapes_tools.cli.train_torch:main"
+cityscapes-train-lightning = "cityscapes_tools.cli.train_lightning:main"
 
 [build-system]
 requires = ["uv_build>=0.12.15,<0.13.0"]

@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
 """Build tabular Cityscapes metadata according to the Hydra configuration."""
 
 from pathlib import Path
 
 import hydra
-from cityscapes_tools.metadata import build_metadata
 from omegaconf import DictConfig
+
+from cityscapes_tools.pipelines.metadata import build_metadata
 
 
 @hydra.main(version_base=None, config_path="../conf", config_name="conf")

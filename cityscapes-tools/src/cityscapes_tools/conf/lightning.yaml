@@ -1,0 +1,12 @@
+defaults:
+  - data: vision
+  - model: model
+  - training: lightning
+  - experiment: experiment
+  - logger: mlflow
+  - checkpoint: checkpoint
+  - _self_
+
+hydra:
+  job:
+    chdir: false

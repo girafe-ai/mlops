@@ -1,0 +1,9 @@
+defaults:
+  - data: vision
+  - model: model
+  - training: manual
+  - _self_
+
+hydra:
+  job:
+    chdir: false

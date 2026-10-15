@@ -22,7 +22,12 @@
 - Do not commit `.venv`; it is a local, reproducible environment created by
   `uv sync`.
 - Keep implementation code in `cityscapes-tools/src/cityscapes_tools/`; keep
-  scripts as thin command-line wrappers.
+  console entry points as thin wrappers in `cityscapes_tools/cli/` and register
+  them in `pyproject.toml`. Keep shared data/model code in `data/` and `models/`,
+  raw PyTorch orchestration in `training/torch/`, and Lightning components in
+  `training/lightning/`. Keep the raw PyTorch path free of Lightning imports.
+- Store Hydra defaults in `cityscapes_tools/conf/` and SQL resources in
+  `cityscapes_tools/pipelines/sql/` so installed commands can load them.
 - Do not make network requests or download Cityscapes data unless explicitly
   requested.
 

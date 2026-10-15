@@ -1,0 +1,9 @@
+manifest_path: data/processed/filtered_manifest.csv
+image_height: 256
+image_width: 512
+# Non-class target value excluded from loss and IoU; also used for mask padding.
+ignore_index: 255
+class_ids:
+  7: 0
+  24: 1
+  26: 2

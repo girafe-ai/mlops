@@ -28,13 +28,13 @@ images containing the configured labels, and writes:
 - `data/processed/filtered_manifest.csv` — DVC-tracked selected image records;
 - `reports/filtered_summary.json` — a DVC metric.
 
-The active selection lives in `conf/preprocess/preprocess.yaml`. Override it
+The active selection lives in
+`src/cityscapes_tools/conf/preprocess/preprocess.yaml`. Override it
 without editing a file:
 
 ```bash
 uv run dvc repro --force
-uv run python scripts/materialize_filtered_dataset.py \
-  preprocess.labels=[truck,bus,train]
+uv run cityscapes-materialize 'preprocess.labels=[truck,bus,train]'
 ```
 
 For a fresh database, recreate the container volume with:
@@ -45,3 +45,9 @@ docker compose up -d
 ```
 
 Do not use this command when you need to retain other local PostgreSQL data.
+
+Implementation code lives in `cityscapes_tools.pipelines`, with SQL definitions
+in `src/cityscapes_tools/pipelines/sql/`. CLI commands load the packaged Hydra
+defaults from `src/cityscapes_tools/conf/` and leave the working directory intact.
+The `dvc.yaml` stages invoke `cityscapes-build-metadata` and
+`cityscapes-materialize`; training configurations do not invalidate these stages.

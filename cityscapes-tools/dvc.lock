@@ -1,0 +1,78 @@
+schema: '2.0'
+stages:
+  metadata:
+    cmd: uv run cityscapes-build-metadata
+    deps:
+    - path: data/cityscapes/gtFine
+      hash: md5
+      md5: 8e4180e3d9cf440cec1494b1af0dbda2.dir
+      size: 808625557
+      nfiles: 20000
+    - path: src/cityscapes_tools/cli/build_metadata.py
+      hash: md5
+      md5: 09543b65d7db12d5675b8a6794f50c76
+      size: 740
+    - path: src/cityscapes_tools/conf/conf.yaml
+      hash: md5
+      md5: 699a8254dd43827f6e6ad3f9024dc84e
+      size: 118
+    - path: src/cityscapes_tools/conf/data/data.yaml
+      hash: md5
+      md5: 4581c59434a6b9b5f874b69f84c2761f
+      size: 215
+    - path: src/cityscapes_tools/pipelines/metadata.py
+      hash: md5
+      md5: 00dd3194d70c0d6c376b9baf5802974b
+      size: 2960
+    outs:
+    - path: data/metadata
+      hash: md5
+      md5: b8ce3cf1e5f4c0e9b07997c4a5ef66d2.dir
+      size: 86907390
+      nfiles: 2
+  filter:
+    cmd: uv run cityscapes-materialize
+    deps:
+    - path: data/metadata
+      hash: md5
+      md5: b8ce3cf1e5f4c0e9b07997c4a5ef66d2.dir
+      size: 86907390
+      nfiles: 2
+    - path: src/cityscapes_tools/cli/materialize_dataset.py
+      hash: md5
+      md5: 517d9cc1b6fffe0ecfc8ccc330b56403
+      size: 1599
+    - path: src/cityscapes_tools/conf/conf.yaml
+      hash: md5
+      md5: 699a8254dd43827f6e6ad3f9024dc84e
+      size: 118
+    - path: src/cityscapes_tools/conf/data/data.yaml
+      hash: md5
+      md5: 4581c59434a6b9b5f874b69f84c2761f
+      size: 215
+    - path: src/cityscapes_tools/conf/database/postgres.yaml
+      hash: md5
+      md5: 8c1f8700ddc9aabda79e21f8fd2a4ea1
+      size: 93
+    - path: src/cityscapes_tools/conf/preprocess/preprocess.yaml
+      hash: md5
+      md5: dce059509f0afd3d2ffb600e8f7b96cb
+      size: 39
+    - path: src/cityscapes_tools/pipelines/postgres.py
+      hash: md5
+      md5: 4bdb4bb823141704a4cbd7a1496c9b48
+      size: 3200
+    - path: src/cityscapes_tools/pipelines/sql
+      hash: md5
+      md5: 1aad5348a438c951b4e846802dc2ce0b.dir
+      size: 783
+      nfiles: 2
+    outs:
+    - path: data/processed/filtered_manifest.csv
+      hash: md5
+      md5: 2720708326f28745d123e827400b5ae6
+      size: 738774
+    - path: reports/filtered_summary.json
+      hash: md5
+      md5: 4be3bb7744105c30f7e8340222ecc617
+      size: 160

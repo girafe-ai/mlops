@@ -1,2 +1,1 @@
-def main() -> None:
-    print("Hello from cityscapes-tools!")
+"""Cityscapes data preparation and segmentation training tools."""

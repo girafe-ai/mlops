@@ -11,8 +11,7 @@ from pathlib import Path
 
 import requests
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-ENV_FILE = PROJECT_ROOT / ".env"
+ENV_FILE = Path.cwd() / ".env"
 LOGIN_URL = "https://www.cityscapes-dataset.com/login"
 PACKAGES_URL = "https://www.cityscapes-dataset.com/downloads/?list"
 MD5_URL = "https://www.cityscapes-dataset.com/md5-sum/?packageID={}"

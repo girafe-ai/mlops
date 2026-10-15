@@ -1,4 +1,4 @@
-"""Build tabular metadata from Cityscapes fine polygon annotations."""
+"""Build tabular metadata from Cityscapes fine polygon annotations for DVC."""
 
 import csv
 import json

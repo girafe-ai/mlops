@@ -1,0 +1,6 @@
+_target_: lightning.pytorch.loggers.MLFlowLogger
+experiment_name: ${experiment.name}
+run_name: ${experiment.run_id}
+tracking_uri: http://127.0.0.1:5000
+log_model: false
+synchronous: true

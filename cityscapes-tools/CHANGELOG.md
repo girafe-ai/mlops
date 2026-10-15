@@ -2,6 +2,15 @@
 
 Changes to Cityscapes tools, by date. Newest first.
 
+## 2026-10-15
+
+- Default Lightning logging to the built-in MLFlowLogger with a local server, optional checkpoint uploads, and a selectable CSV logger.
+- Use data.ignore_index consistently for mask remapping, batch padding, loss, and Lightning IoU metrics in both training paths.
+- Name experiment runs in Hydra and save best-validation-IoU and latest-epoch checkpoints under models, separately from CSV metrics.
+- Log Lightning metrics and module hyperparameters locally with a Hydra-configured CSVLogger.
+- Organize shared data/models and separate PyTorch/Lightning training packages; expose five installed CLI commands with packaged Hydra and SQL resources.
+- Train a small Cityscapes segmentation model with either an explicit PyTorch loop or Lightning core objects.
+
 ## 2026-10-07
 
 - Build reproducible Cityscapes metadata and filtered manifests with DVC, Hydra, and a local PostgreSQL database.

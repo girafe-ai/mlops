@@ -1,0 +1,27 @@
+save_dir: models
+dirpath: ${checkpoint.save_dir}/${experiment.name}/${experiment.run_id}
+
+best:
+  _target_: lightning.pytorch.callbacks.ModelCheckpoint
+  dirpath: ${checkpoint.dirpath}
+  filename: best
+  monitor: val_iou
+  mode: max
+  save_top_k: 1
+  save_last: false
+  save_weights_only: false
+  auto_insert_metric_name: false
+  enable_version_counter: false
+  save_on_train_epoch_end: false
+
+latest:
+  _target_: lightning.pytorch.callbacks.ModelCheckpoint
+  dirpath: ${checkpoint.dirpath}
+  filename: epoch_{epoch:03d}
+  monitor: null
+  save_top_k: 1
+  save_last: false
+  save_weights_only: false
+  auto_insert_metric_name: false
+  enable_version_counter: false
+  save_on_train_epoch_end: true

@@ -6,3 +6,10 @@ __pycache__/
 *.py[cod]
 outputs/
 data/cityscapes/*.zip
+lightning_logs/
+checkpoints/
+/models/
+/mlflow.db
+/mlflow.db-*
+/mlartifacts/
+/mlruns/

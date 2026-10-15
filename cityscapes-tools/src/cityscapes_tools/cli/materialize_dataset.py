@@ -1,18 +1,18 @@
-#!/usr/bin/env python3
 """Load metadata into PostgreSQL and materialize a SQL-filtered manifest."""
 
 from pathlib import Path
 
 import hydra
-from cityscapes_tools.postgres import (
+from omegaconf import DictConfig
+
+from cityscapes_tools.pipelines.postgres import (
     build_connection_string,
     export_filtered_manifest,
     load_metadata,
     write_summary,
 )
-from omegaconf import DictConfig
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SQL_ROOT = Path(__file__).resolve().parents[1] / "pipelines" / "sql"
 
 
 @hydra.main(version_base=None, config_path="../conf", config_name="conf")
@@ -27,13 +27,13 @@ def main(config: DictConfig) -> None:
     )
     metadata_counts = load_metadata(
         connection_string=connection_string,
-        schema_path=PROJECT_ROOT / "sql" / "schema.sql",
+        schema_path=SQL_ROOT / "schema.sql",
         metadata_dir=Path(config.data.metadata_dir),
     )
     labels = list(config.preprocess.labels)
     selected_images = export_filtered_manifest(
         connection_string=connection_string,
-        query_path=PROJECT_ROOT / "sql" / "select_filtered_images.sql",
+        query_path=SQL_ROOT / "select_filtered_images.sql",
         labels=labels,
         output_path=Path(config.data.filtered_manifest_path),
     )

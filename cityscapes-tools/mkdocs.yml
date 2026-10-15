@@ -6,6 +6,7 @@ nav:
   - Dataset: dataset.md
   - Download: download.md
   - DVC and PostgreSQL pipeline: pipeline.md
+  - PyTorch and Lightning: training.md
   - Python API: api.md
 
 plugins:

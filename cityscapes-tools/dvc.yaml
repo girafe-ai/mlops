@@ -1,21 +1,25 @@
 stages:
   metadata:
-    cmd: uv run python scripts/build_metadata.py
+    cmd: uv run cityscapes-build-metadata
     deps:
-      - conf
-      - scripts/build_metadata.py
-      - src/cityscapes_tools/metadata.py
+      - src/cityscapes_tools/conf/conf.yaml
+      - src/cityscapes_tools/conf/data/data.yaml
+      - src/cityscapes_tools/cli/build_metadata.py
+      - src/cityscapes_tools/pipelines/metadata.py
       - data/cityscapes/gtFine
     outs:
       - data/metadata
 
   filter:
-    cmd: uv run python scripts/materialize_filtered_dataset.py
+    cmd: uv run cityscapes-materialize
     deps:
-      - conf
-      - scripts/materialize_filtered_dataset.py
-      - src/cityscapes_tools/postgres.py
-      - sql
+      - src/cityscapes_tools/conf/conf.yaml
+      - src/cityscapes_tools/conf/data/data.yaml
+      - src/cityscapes_tools/conf/preprocess/preprocess.yaml
+      - src/cityscapes_tools/conf/database/postgres.yaml
+      - src/cityscapes_tools/cli/materialize_dataset.py
+      - src/cityscapes_tools/pipelines/postgres.py
+      - src/cityscapes_tools/pipelines/sql
       - data/metadata
     outs:
       - data/processed/filtered_manifest.csv

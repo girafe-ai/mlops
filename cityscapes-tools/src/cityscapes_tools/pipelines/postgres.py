@@ -1,4 +1,4 @@
-"""Load Cityscapes metadata into PostgreSQL and export SQL-selected manifests."""
+"""Load Cityscapes metadata into PostgreSQL and export manifests for DVC."""
 
 import csv
 import json

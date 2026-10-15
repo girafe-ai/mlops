@@ -15,13 +15,13 @@ Then check the downloader's defaults without contacting Cityscapes or creating
 data files:
 
 ```bash
-uv run python scripts/download_cityscapes.py download --dry-run
+uv run cityscapes-download --dry-run
 ```
 
 Download the standard left images and fine annotations:
 
 ```bash
-uv run python scripts/download_cityscapes.py download
+uv run cityscapes-download
 ```
 
 The command saves `leftImg8bit_trainvaltest.zip` and `gtFine_trainvaltest.zip`
@@ -33,7 +33,7 @@ To choose other packages or a destination, use names from your Cityscapes downlo
 page:
 
 ```bash
-uv run python scripts/download_cityscapes.py download \
+uv run cityscapes-download \
   --packages=leftImg8bit_trainvaltest.zip \
   --destination=data/cityscapes
 ```
